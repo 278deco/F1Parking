@@ -1,4 +1,5 @@
 package fr.f1parking.ui;
+import fr.f1parking.utiles.Cars;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -16,8 +17,8 @@ public class Coordinator extends Application {
     }
 
     //application dimension
-    private int WIDTH = 600;
-    private int HEIGHT = 700;
+    private int WIDTH = 800;
+    private int HEIGHT = 850;
 
     private Game_Interface game_interface;
 
@@ -25,14 +26,23 @@ public class Coordinator extends Application {
 
     private Hightscore_Interface hightscore_interface;
 
+    private Intro_Interface intro_interface;
+
+    private Animation animation;
+
     private Stage primaryStage;
 
+    private Cars carsList;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        carsList = new Cars("src/resources/img/");
+
         menue_interface = new Menue_Interface(this);
         game_interface = new Game_Interface(this);
         hightscore_interface = new Hightscore_Interface(this);
+        intro_interface = new Intro_Interface(this);
+
 
         File icon_file = new File("src/resources/img/Park_The_F1;png");
         Image icon = new Image(icon_file.toURI().toString(),0.2*WIDTH,0.2*HEIGHT,false,true);
@@ -56,7 +66,13 @@ public class Coordinator extends Application {
             case 3:
                 primaryStage.setScene(hightscore_interface.getHightscore_scene());
                 break;
+            case 4:
+                primaryStage.setScene(intro_interface.getIntro_scene());
         }
 
+    }
+
+    public Cars getCarManager() {
+        return carsList;
     }
 }
