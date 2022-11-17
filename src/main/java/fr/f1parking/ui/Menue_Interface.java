@@ -54,7 +54,7 @@ public class Menue_Interface {
         FlowPane left_container = new FlowPane();
         left_container.setPrefSize(c.getWIDTH()/3, c.getHEIGHT());
 
-        left_container.setStyle("-fx-background-color: #79443b");
+        //left_container.setStyle("-fx-background-color: #79443b");
         root_menue.add(left_container, 0,0);
 
 
@@ -68,7 +68,7 @@ public class Menue_Interface {
         right_container.setPrefSize(c.getWIDTH()/3, c.getHEIGHT());
 
 
-        right_container.setStyle("-fx-background-color: #003a9e");
+        //right_container.setStyle("-fx-background-color: #003a9e");
         root_menue.add(right_container, 2, 0);
 
 
@@ -138,12 +138,13 @@ public class Menue_Interface {
 
 
         // transition and flowpane inside
-        TranslateTransition menue_translatetransition = new TranslateTransition(Duration.seconds(3), animation.getAnimationView());
-        menue_translatetransition.setFromY(c.getHEIGHT());
+        TranslateTransition menue_translatetransition = new TranslateTransition(Duration.seconds(1), animation.getAnimationView());
+        menue_translatetransition.setFromY(800);
         menue_translatetransition.setToY(-300);
         menue_translatetransition.setInterpolator(Interpolator.LINEAR);
         menue_translatetransition.setOnFinished(event -> {
             animation.randomizeImage();
+            menue_translatetransition.setDuration(Duration.seconds(animation.getCar_speed()));
             menue_translatetransition.play();
         });
         FlowPane imageview_container = new FlowPane(animation.getAnimationView());

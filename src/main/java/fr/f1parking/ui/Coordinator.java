@@ -36,6 +36,7 @@ public class Coordinator extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
         carsList = new Cars("src/resources/img/");
 
         menue_interface = new Menue_Interface(this);
@@ -44,13 +45,13 @@ public class Coordinator extends Application {
         intro_interface = new Intro_Interface(this);
 
 
-        File icon_file = new File("src/resources/img/Park_The_F1;png");
+        File icon_file = new File("src/resources/img/Park_The_F1.png");
         Image icon = new Image(icon_file.toURI().toString(),0.2*WIDTH,0.2*HEIGHT,false,true);
         primaryStage.getIcons().add(icon);
 
 
         primaryStage.setTitle("unpark the f1");
-        primaryStage.setScene(menue_interface.getScene_menue());
+        primaryStage.setScene(intro_interface.getIntro_scene());
         primaryStage.setResizable(false);
         primaryStage.show();
 

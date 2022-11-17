@@ -1,12 +1,10 @@
 package fr.f1parking.ui;
 
 import javafx.scene.Scene;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.awt.*;
 
 public class Game_Interface {
 
@@ -19,6 +17,7 @@ public class Game_Interface {
     public Game_Interface(final Coordinator d){
 
         GridPane game_root = new GridPane();
+        HBox root = new HBox();
         MenuBar game_menubar = new MenuBar();
 
         //column matrix
@@ -49,17 +48,12 @@ public class Game_Interface {
         game_rowE.setPercentHeight(d.getHEIGHT()/6);
         RowConstraints game_rowF = new RowConstraints();
         game_rowF.setPercentHeight(d.getHEIGHT()/6);
-
-
-
-
-
-
-
-
-
-
-
+        game_root.getRowConstraints().addAll(game_rowA, game_rowB, game_rowC, game_rowD, game_rowE, game_rowF);
+        game_root.getColumnConstraints().addAll(game_column1,game_colun2,game_colun3,game_colun4,game_colun5,game_colun6);
+        FlowPane test = new FlowPane();
+        test.setStyle("-fx-background-color: #79443b");
+        game_root.add(test, 1,1);
+        game_scene = new Scene(game_root, d.getWIDTH(), d.getHEIGHT());
 
 
     }
