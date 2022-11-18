@@ -17,7 +17,16 @@ public class Tuple<A, B> {
 	public B getValueB() {
 		return valueB;
 	}
-
+ 	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Tuple  && isEqual((Tuple<?, ?>)obj);
+	}
+	
+	private boolean isEqual(Tuple<?, ?> tuple) {
+		return tuple.getValueA().equals(this.getValueA()) && tuple.getValueB().equals(this.getValueB());
+	}
+	
 	public String toString() {
 		return "( "+ valueA + " : " + valueB +" )";
 	}
