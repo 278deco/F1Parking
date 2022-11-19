@@ -21,6 +21,12 @@ class RandomSeedTest {
 		//When a seed is set in the constructor, it set the main seed of the class with the same value
 		assertEquals(definedSeed.getSeed(), 5461684566155L);
 		
+		//A seed defined by the user and regenerated should not be equal to the user's defined seed
+		//Dangerous test because a tiny probability could make two seed equals
+		final RandomSeed testedSeed = new RandomSeed(97884614689L);
+		testedSeed.regenerateSeed(123456789L);
+		assertNotEquals(testedSeed.getSeed(), 97884614689L);
+		
 		//Cannot generate a seed without a byte weight
 		assertThrows(IllegalArgumentException.class, () -> new RandomSeed(RandomSeedByte.NOT_GENERATED));
 

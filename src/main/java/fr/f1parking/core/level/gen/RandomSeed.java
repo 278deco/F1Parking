@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 public class RandomSeed {
 	
 	private long seed;
-	private final RandomSeedByte byteWeight;
+	private RandomSeedByte byteWeight;
 	
 	/**
 	 * Create a new seed and generate it
@@ -65,20 +65,44 @@ public class RandomSeed {
 	
 	/**
 	 * Regenerate the seed contained in this class
-	 * <p><strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
+	 * <p>By default it, this method will set the new RandomSeedByte to 32 </br>
+	 * <strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
 	 * @param byteSeed - a seed used to generate a new one
 	 * @see #setSeed(byte[])
 	 */
-	public void setSeed(long seed) {
-		this.setSeed(generateByteSeedArray(seed));
+	public void regenerateSeed(long seed) {
+		this.regenerateSeed(generateByteSeedArray(seed), RandomSeedByte.BYTE_32);
+	}
+	
+	/**
+	 * Regenerate the seed contained in this class
+	 * <p>By default it, this method will set the new RandomSeedByte to 32 </br>
+	 * <strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
+	 * @param byteSeed - an array of seed used by the seed generator
+	 */
+	public void regenerateSeed(byte[] byteSeed) {
+		this.regenerateSeed(byteSeed, RandomSeedByte.BYTE_32);
+	}
+	
+	/**
+	 * Regenerate the seed contained in this class
+	 * <p><strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
+	 * @param byteSeed - a seed used to generate a new one
+	 * @param weight - an new RandomSeedByte used in the generation
+	 * @see #setSeed(byte[])
+	 */
+	public void regenerateSeed(long seed, RandomSeedByte weight) {
+		this.regenerateSeed(generateByteSeedArray(seed), weight);
 	}
 	
 	/**
 	 * Regenerate the seed contained in this class
 	 * <p><strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
 	 * @param byteSeed - an array of seed used by the seed generator
+	 * @param weight - an new RandomSeedByte used in the generation
 	 */
-	public void setSeed(byte[] byteSeed) {
+	public void regenerateSeed(byte[] byteSeed, RandomSeedByte weight) {
+		this.byteWeight = weight;
 		this.seed = generateUseableSeed(new SecureRandom(byteSeed).generateSeed(this.byteWeight.weight), new SecureRandom(byteSeed).generateSeed(this.byteWeight.weight));
 	}
 	
