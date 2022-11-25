@@ -1,8 +1,11 @@
 package fr.f1parking.ui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 
@@ -16,11 +19,28 @@ public class Game_Interface {
 
     public Game_Interface(final Coordinator d){
 
-        GridPane game_root = new GridPane();
-        HBox root = new HBox();
-        MenuBar game_menubar = new MenuBar();
+        //initialize scene
+        GridPane root = new GridPane();
+        ColumnConstraints game_column10 = new ColumnConstraints();
+        game_column10.setPrefWidth(d.getWIDTH()/3);
+        ColumnConstraints game_column12 = new ColumnConstraints();
+        game_column12.setPrefWidth(470);
+        ColumnConstraints game_column13 = new ColumnConstraints();
+        game_column13.setPrefWidth(d.getWIDTH()/3);
+        RowConstraints wallah = new RowConstraints();
+        wallah.setPercentHeight(20);
 
-        //column matrix
+
+        FlowPane flowtest = new FlowPane();
+        flowtest.setPadding(new Insets(250,0,200,0));
+        flowtest.setStyle("-fx-background-color: #B2BABB");
+        flowtest.setAlignment(Pos.CENTER);
+        root.getColumnConstraints().addAll(game_column10,game_column12, game_column13);
+        root.getRowConstraints().add(wallah);
+        root.add(flowtest,1,1);
+
+        //initialize inside game
+        GridPane game_root = new GridPane();
         ColumnConstraints game_column1 = new ColumnConstraints();
         game_column1.setPercentWidth(d.getWIDTH()/6);
         ColumnConstraints game_colun2 = new ColumnConstraints();
@@ -50,10 +70,15 @@ public class Game_Interface {
         game_rowF.setPercentHeight(d.getHEIGHT()/6);
         game_root.getRowConstraints().addAll(game_rowA, game_rowB, game_rowC, game_rowD, game_rowE, game_rowF);
         game_root.getColumnConstraints().addAll(game_column1,game_colun2,game_colun3,game_colun4,game_colun5,game_colun6);
-        FlowPane test = new FlowPane();
-        test.setStyle("-fx-background-color: #79443b");
-        game_root.add(test, 1,1);
-        game_scene = new Scene(game_root, d.getWIDTH(), d.getHEIGHT());
+        flowtest.getChildren().add(game_root);
+
+
+
+
+
+        game_scene = new Scene(root, d.getWIDTH(), d.getHEIGHT());
+
+       // MenuBar Game_menuebar = new MenuBar()
 
 
     }

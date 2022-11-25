@@ -17,8 +17,8 @@ public class Coordinator extends Application {
     }
 
     //application dimension
-    private int WIDTH = 800;
-    private int HEIGHT = 850;
+    private int WIDTH = 1280;
+    private int HEIGHT = 720;
 
     private Game_Interface game_interface;
 
