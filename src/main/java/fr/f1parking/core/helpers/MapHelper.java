@@ -2,6 +2,7 @@ package fr.f1parking.core.helpers;
 
 import fr.f1parking.core.entities.Entity;
 import fr.f1parking.core.entities.placement.Coordinate;
+import fr.f1parking.core.entities.placement.Direction;
 import fr.f1parking.core.level.gen.IGenerator;
 import fr.f1parking.core.level.objects.GridBox;
 
@@ -24,5 +25,9 @@ public class MapHelper {
 		}
 		
 		return ret;
+	}
+	
+	public static boolean isPlayerFinished(Direction choosedDir, Coordinate playerCoord, int size) {
+		return playerCoord.equals(new Coordinate(IGenerator.GRID_SIZE-size, IGenerator.GRID_SIZE/2)) && choosedDir == Direction.EAST;
 	}
 }
