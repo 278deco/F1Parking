@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class JSONFile {
 
+	private static final Logger LOGGER = LogManager.getLogger(JSONFile.class);
 	private static final ObjectMapper FILES_MAPPER = new ObjectMapper().enable(DeserializationFeature.USE_LONG_FOR_INTS);
 
 	protected String path;
@@ -31,7 +35,7 @@ public abstract class JSONFile {
 			readFile();
 
 		} catch (IOException e) {
-			System.err.println("Unexpected error while loading file "+this.path+ "\n "+e);
+			LOGGER.warn("Unexpected error while loading file "+this.path,e);
 		}
 	}
 
@@ -62,7 +66,7 @@ public abstract class JSONFile {
 					readFile();
 
 				} catch (IOException e) {
-					System.err.println("Unexpected error while saving file "+path+" \n"+e);
+					LOGGER.warn("Unexpected error while saving file "+path,e);
 				}
 
 			}
