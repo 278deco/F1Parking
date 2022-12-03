@@ -46,8 +46,12 @@ public class RandomSeed {
 	
 	private long generateUseableSeed(byte[] lowByte, byte[] highByte) {
 		long ret = 0;
+		for(int i = 0; i < lowByte.length; i++) {
+			System.out.println(lowByte[i]);
+			ret = (ret & 0xffff) + ((highByte[i]*highByte[i] ^ lowByte[i]) & 255);
+		}
 		
-		for(int i = 0; i < lowByte.length; i++) ret = (ret<<8) + ((highByte[i]*highByte[i] ^ lowByte[i]) & 255);
+	//	ret = this.byteWeight == RandomSeedByte.BYTE_32 ? ret & 0x100000000 : 	 ;
 		
 		return ret;
 	}
