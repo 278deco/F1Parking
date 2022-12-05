@@ -1,6 +1,7 @@
 package fr.f1parking.core.level.gen.layers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,8 @@ public class ManualPlacingLayer implements ILayer {
 		if(generator == null) throw new NullPointerException("Cannot precaculate the layer if no generator has been set");
 		
 		boolean isPlayerPresent = false;
+		final List<Coordinate> occupiedCoords = new ArrayList<>();
+		
 		for(byte y = 0; y < IGenerator.GRID_SIZE; y++) {
 			for(byte x = 0; x < IGenerator.GRID_SIZE; x++) {
 				if(generator.getPos(x, y) != 0) {
@@ -62,9 +65,18 @@ public class ManualPlacingLayer implements ILayer {
 						this.entityCountExceptPlayer-=1; 
 					}
 					
-					Coordinate res = DeplacementHelper.getXYValueForDirection(infos[1], Direction.of(infos[2]));
-					if((x+res.getX() < 0 || x+res.getX() > IGenerator.GRID_SIZE) || (y+res.getY() < 0 || y+res.getY() > IGenerator.GRID_SIZE)) 
-						throw new IllegalCoordinatesDefinitionException("Out of bound coordinates");
+					Coordinate result = null;
+					for(byte i = infos[1]; i > 0; i--) {
+						result = new Coordinate(x,y).add(DeplacementHelper.getDynamicXYValueForDirection(infos[1], i, Direction.of(infos[2])));
+						
+						if(occupiedCoords.contains(result)) throw new IllegalCoordinatesDefinitionException("Coordinates already used (Coords: "+result+ ", "
+								+ "Obj[type: "+infos[0]+", size: "+infos[1]+", dir: "+Direction.of(infos[2])+"])");
+						else occupiedCoords.add(result);
+					}
+					
+					if(((result.getX()) < 0 || result.getX() > IGenerator.GRID_SIZE) || ((result.getY()) < 0 || result.getY() > IGenerator.GRID_SIZE)) 
+						throw new IllegalCoordinatesDefinitionException("Out of bound coordinates (Coords: "+result+", Origin: "+new Coordinate(x,y)
+								+ ", Obj[type: "+infos[0]+", size: "+infos[1]+", dir: "+Direction.of(infos[2])+"])");
 				}
 			}
 		}
@@ -125,8 +137,14 @@ public class ManualPlacingLayer implements ILayer {
 		return map;
 	}
 	
+	@Override
 	public Optional<Integer> getEntityCount() {
 		return entityCountExceptPlayer == -1 ? Optional.empty() : Optional.of(entityCountExceptPlayer);
+	}
+	
+	@Override
+	public Optional<List<Entity>> getEntities() {
+		return (!isPrecalculated || entityCountExceptPlayer == -1) ? Optional.empty() : Optional.of(Collections.unmodifiableList(this.entitiesList));
 	}
 	
 	private List<GridBox> getNeighborList(List<GridBox> neighbor, GridBox instance) {

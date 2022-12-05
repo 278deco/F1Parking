@@ -18,7 +18,7 @@ import fr.f1parking.core.level.objects.GridBox;
 public class Map extends AbstractMap {
 	
 	private String name;
-	private ILayer layer;
+	
 	
 	private Map(Map.Builder builder) {
 		this.id = builder.getid();

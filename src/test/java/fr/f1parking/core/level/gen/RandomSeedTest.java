@@ -28,7 +28,7 @@ class RandomSeedTest {
 		assertNotEquals(testedSeed.getSeed(), 97884614689L);
 		
 		//Cannot generate a seed without a byte weight
-		assertThrows(IllegalArgumentException.class, () -> new RandomSeed(RandomSeedByte.NOT_GENERATED));
+		assertThrows(IllegalArgumentException.class, () -> new RandomSeed(RandomSeedByte.USER_GENERATED));
 
 		//Check if the equals function works
 		assertEquals(new RandomSeed(5461684566155L).equals(definedSeed), true);

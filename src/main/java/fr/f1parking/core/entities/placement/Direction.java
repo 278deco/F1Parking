@@ -24,6 +24,15 @@ public enum Direction {
 		return ret;
 	}
 	
+	/**
+	 * Get a direction by giving it index
+	 * @param v - the int value of the direction
+	 * @return a new direction
+	 */
+	public static Direction of(int v) {
+		return of((byte)v);
+	}
+	
 	private byte value;
 	private Direction(byte v) {
 		this.value = v;

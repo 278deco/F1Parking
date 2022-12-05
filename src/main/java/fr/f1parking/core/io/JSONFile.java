@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class JSONFile {
 
-	private static final Logger LOGGER = LogManager.getLogger(JSONFile.class);
+	protected static final Logger LOGGER = LogManager.getLogger(JSONFile.class);
 	private static final ObjectMapper FILES_MAPPER = new ObjectMapper().enable(DeserializationFeature.USE_LONG_FOR_INTS);
 
 	protected String path;

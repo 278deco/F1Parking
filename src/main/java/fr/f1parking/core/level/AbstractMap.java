@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import fr.f1parking.core.entities.placement.Coordinate;
 import fr.f1parking.core.level.gen.IGenerator;
+import fr.f1parking.core.level.gen.ILayer;
 import fr.f1parking.core.level.objects.GridBox;
 
 public abstract class AbstractMap {
@@ -11,7 +12,8 @@ public abstract class AbstractMap {
 	private GridBox[][] gridMap;
 	protected UUID id;
 	
-	protected IGenerator generator;	
+	protected IGenerator generator;
+	protected ILayer layer;
 
 	protected abstract void generateMap();
 

@@ -2,6 +2,7 @@ package fr.f1parking.core.io.json;
 
 import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.io.JSONFile;
+import fr.f1parking.ui.render.Texture;
 
 public class JSONConfiguration extends JSONFile {
 
@@ -27,7 +28,11 @@ public class JSONConfiguration extends JSONFile {
 		if(getData().containsKey("player_car")) {
 			return (String)getData().get("player_car");
 		}
-		return "redbull_f1"; //Default car
+		return "redbull"; //Default car
+	}
+	
+	public Texture getPlayerCarTexture() {
+		return IOHandler.getInstance().getTexturesFile().getCarTexture(getPlayerCar());
 	}
 	
 	public void setMusicVolume(int percentage) {

@@ -29,7 +29,7 @@ public class RandomSeed {
 	 * @param byteWeight - the byte weight applied to the seed
 	 */
 	public RandomSeed(RandomSeedByte byteWeight) {
-		if(byteWeight == RandomSeedByte.NOT_GENERATED) throw new IllegalArgumentException("The byte weight cannot be zero");
+		if(byteWeight == RandomSeedByte.USER_GENERATED) throw new IllegalArgumentException("The byte weight cannot be zero");
 		this.byteWeight = byteWeight;
 		this.seed = generateUseableSeed(new SecureRandom().generateSeed(byteWeight.getWeight()), new SecureRandom().generateSeed(byteWeight.getWeight()));
 	}
@@ -40,20 +40,17 @@ public class RandomSeed {
 	 * @param seed - the seed used
 	 */
 	public RandomSeed(long seed) {
-		this.byteWeight = RandomSeedByte.NOT_GENERATED;
-		this.seed = seed;
+		this.byteWeight = RandomSeedByte.USER_GENERATED;
+		this.seed = seed & 0xffffffffL;
 	}
 	
 	private long generateUseableSeed(byte[] lowByte, byte[] highByte) {
 		long ret = 0;
 		for(int i = 0; i < lowByte.length; i++) {
-			System.out.println(lowByte[i]);
-			ret = (ret & 0xffff) + ((highByte[i]*highByte[i] ^ lowByte[i]) & 255);
+			ret = (ret<<8) + ((highByte[i]*highByte[i] | lowByte[i]) & 255);
 		}
-		
-	//	ret = this.byteWeight == RandomSeedByte.BYTE_32 ? ret & 0x100000000 : 	 ;
-		
-		return ret;
+
+		return this.byteWeight == RandomSeedByte.BYTE_32 ? ret & 0xffffffffL : ret;
 	}
 	
 	private static byte[] generateByteSeedArray(long seed) {
@@ -118,6 +115,10 @@ public class RandomSeed {
 		return seed;
 	}
 	
+	public RandomSeedByte getSeedBitsNumber() {
+		return this.byteWeight;
+	}
+	
 	/**
 	 * Compare this instance of RandomSeed with another 
 	 * and tell if their are equal
@@ -143,7 +144,7 @@ public class RandomSeed {
 	 * @since 0.1
 	 */
 	public enum RandomSeedByte {
-		NOT_GENERATED(0),
+		USER_GENERATED(32),
 		BYTE_32(32),
 		BYTE_64(64);
 
