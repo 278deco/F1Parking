@@ -185,6 +185,7 @@ public class Menue_Interface {
             } else {
                 btn.setStyle(null);
                 btn.setEffect(null);
+                btn.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px");
                 scene_menue.setCursor(javafx.scene.Cursor.DEFAULT);
             }});
     }

@@ -26,7 +26,12 @@ public class Intro_Interface {
 
         Media intro_video = new Media(new File("src/resources/mp3_files/F1 2020 intro _FLUTE_.mp4").toURI().toString());
         mediaplayer = new MediaPlayer(intro_video);
-        mediaplayer.play();
+        if (f.getScene_indicator() == 4){
+            mediaplayer.play();
+        }else {
+            mediaplayer.stop();
+        }
+
        // Scanner keyboard = new Scanner(System.in);
 
 

@@ -30,9 +30,13 @@ public class Coordinator extends Application {
 
     private Animation animation;
 
+
     private Stage primaryStage;
 
     private Cars carsList;
+
+
+    private int scene_indicator;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -51,12 +55,13 @@ public class Coordinator extends Application {
 
 
         primaryStage.setTitle("unpark the f1");
-        primaryStage.setScene(intro_interface.getIntro_scene());
+        primaryStage.setScene(menue_interface.getScene_menue());
         primaryStage.setResizable(false);
         primaryStage.show();
 
     }
     public void change_scene(int i){
+        scene_indicator = i;
         switch (i){
             case 1:
                 primaryStage.setScene(game_interface.getGame_scene());
@@ -75,5 +80,9 @@ public class Coordinator extends Application {
 
     public Cars getCarManager() {
         return carsList;
+    }
+    public int getScene_indicator(){ return scene_indicator;}
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }
