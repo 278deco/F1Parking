@@ -1,13 +1,12 @@
 package fr.f1parking.ui;
 
+import java.io.File;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
-
-import java.io.File;
-import java.util.Scanner;
-
-import javafx.scene.layout.HBox;
-import javafx.scene.media.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 
 public class Intro_Interface {

@@ -21,6 +21,15 @@ public class Main {
 	public static void main(String[] args) {
 		IOHandler.getInstance();
 		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				LOGGER.info("Shutting down program...");
+				IOHandler.getInstance().saveAllFiles();
+			}
+		}, "Shutdown Thread"));
+		
 		generateTreeMap();
 		
 		treeMap.testRender();
@@ -48,7 +57,6 @@ public class Main {
 //		LOGGER.info(map.moveEntity(entities.get(1), Direction.SOUTH));
 //				
 //		map.testRender(entities, player);
-	
 	}
 	
 	public static void generateTreeMap() {

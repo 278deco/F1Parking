@@ -1,13 +1,10 @@
 package fr.f1parking.ui;
 
 
-import fr.f1parking.utiles.Cars;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import java.io.File;
 import java.util.List;
 import java.util.Random;
+
+import javafx.scene.image.ImageView;
 
 
 public class Animation {
