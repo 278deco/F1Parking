@@ -1,10 +1,10 @@
 package fr.f1parking.ui;
+import java.io.File;
+
 import fr.f1parking.utiles.Cars;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Coordinator extends Application {
 

@@ -13,6 +13,8 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
+sourceCompatibility = 18
+
 javafx {
     version = "19"
     modules = ['javafx.controls', 'javafx.media']
@@ -32,13 +34,13 @@ repositories {
 dependencies {
 
     // Use JUnit test framework
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.0'
+    implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.0'
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.0'
+	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.0'
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.0'
+	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.0'
 	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite
-	testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.0'
+	implementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.0'
 	
 	// https://logging.apache.org/log4j/2.x/maven-artifacts.html
 	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
