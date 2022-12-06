@@ -22,7 +22,7 @@ public class Coordinator extends Application {
 
     private Game_Interface game_interface;
 
-    private Menue_Interface menue_interface;
+    private MenuInterface menue_interface;
 
     private Hightscore_Interface hightscore_interface;
 
@@ -42,7 +42,7 @@ public class Coordinator extends Application {
         this.primaryStage = primaryStage;
         carsList = new Cars("src/resources/img/");
 
-        menue_interface = new Menue_Interface(this);
+        menue_interface = new MenuInterface(this);
         game_interface = new Game_Interface(this);
         hightscore_interface = new Hightscore_Interface(this);
         intro_interface = new Intro_Interface(this);

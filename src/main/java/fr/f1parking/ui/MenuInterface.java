@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 import java.io.File;
 
-public class Menue_Interface {
+public class MenuInterface {
 
     private Button exit;
 
@@ -29,7 +29,7 @@ public class Menue_Interface {
 
     private int position;
 
-    public Menue_Interface (final Coordinator c){
+    public MenuInterface (final Coordinator c){
 
         animation = new Animation(c.getCarManager().getCar_list());
 
