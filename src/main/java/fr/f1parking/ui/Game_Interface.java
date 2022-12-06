@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
 public class Game_Interface {
 
     private Scene game_scene;
@@ -28,8 +27,6 @@ public class Game_Interface {
 
 
     public Game_Interface(final Coordinator d){
-
-
 
         //initialize scene
 

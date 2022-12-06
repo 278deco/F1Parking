@@ -30,7 +30,6 @@ public class Coordinator extends Application {
 
     private Animation animation;
 
-
     private Stage primaryStage;
 
     private Cars carsList;
@@ -54,8 +53,8 @@ public class Coordinator extends Application {
         primaryStage.getIcons().add(icon);
 
 
-        primaryStage.setTitle("unpark the f1");
-        primaryStage.setScene(menue_interface.getScene_menue());
+        primaryStage.setTitle("Unpark the F1");
+        primaryStage.setScene(intro_interface.getIntro_scene());
         primaryStage.setResizable(false);
         primaryStage.show();
 

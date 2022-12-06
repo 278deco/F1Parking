@@ -1,8 +1,8 @@
 package fr.f1parking.ui;
 
-import javafx.scene.image.Image;
-
 import java.io.File;
+
+import javafx.scene.image.Image;
 
 public class Car {
 

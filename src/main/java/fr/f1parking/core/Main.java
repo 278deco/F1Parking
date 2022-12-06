@@ -3,10 +3,11 @@ package fr.f1parking.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.level.Difficulty;
 import fr.f1parking.core.level.gen.RandomSeed;
 import fr.f1parking.core.level.gen.backtracking.Tree;
+import fr.f1parking.ui.Coordinator;
+import javafx.application.Application;
 
 public class Main {
 	
@@ -19,20 +20,23 @@ public class Main {
 	private static final Logger LOGGER = LogManager.getLogger(Main.class);
 	
 	public static void main(String[] args) {
-		IOHandler.getInstance();
+//		IOHandler.getInstance();
+//		
+//		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				LOGGER.info("Shutting down program...");
+//				IOHandler.getInstance().saveAllFiles();
+//			}
+//		}, "Shutdown Thread"));
+//		
+//		generateTreeMap();
+//		
+//		treeMap.testRender();
 		
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				LOGGER.info("Shutting down program...");
-				IOHandler.getInstance().saveAllFiles();
-			}
-		}, "Shutdown Thread"));
+		Application.launch(Coordinator.class, args);
 		
-		generateTreeMap();
-		
-		treeMap.testRender();
 //		
 //		LOGGER.info(map.moveEntity(player, Direction.WEST));
 //		

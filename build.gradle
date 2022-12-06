@@ -13,8 +13,6 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-sourceCompatibility = 18
-
 javafx {
     version = "19"
     modules = ['javafx.controls', 'javafx.media']
@@ -34,21 +32,21 @@ repositories {
 dependencies {
 
     // Use JUnit test framework
-    implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.0'
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.0'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.0'
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params
-	implementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.0'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.0'
 	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite
-	implementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.0'
+	testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.0'
 	
 	// https://logging.apache.org/log4j/2.x/maven-artifacts.html
-	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0'
-  	implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0'
+	implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.19.0'
+  	implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
 		
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.2'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
 
 }
 
-mainClassName='fr.f1parking.ui.Main'
+mainClassName='fr.f1parking.core.Main'

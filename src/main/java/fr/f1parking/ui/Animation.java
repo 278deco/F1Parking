@@ -1,11 +1,9 @@
 package fr.f1parking.ui;
 
-
 import java.util.List;
 import java.util.Random;
 
 import javafx.scene.image.ImageView;
-
 
 public class Animation {
 
