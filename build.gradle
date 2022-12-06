@@ -9,6 +9,18 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id "org.openjfx.javafxplugin" version "0.0.13"
+    id 'org.beryx.jlink' version '2.25.0'
+}
+
+javafx {
+    version = "19"
+    modules = ['javafx.controls', 'javafx.media']
+}
+jlink {
+    launcher {
+        name = 'F1Parking'
+    }
 }
 
 repositories {
@@ -28,3 +40,5 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite
 	testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: '1.9.0'
 }
+
+mainClassName='fr.f1parking.ui.Main'
