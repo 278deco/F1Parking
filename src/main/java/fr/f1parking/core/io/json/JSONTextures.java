@@ -32,7 +32,7 @@ public class JSONTextures extends JSONFile {
 				}
 			}
 		}
-		
+		LOGGER.info(carsMap);
 		if(getData().containsKey("trucks")) {
 			for(Map.Entry<String, Object> entry : ((HashMap<String, Object>) getData().get("trucks")).entrySet()) {
 				try {
@@ -68,13 +68,13 @@ public class JSONTextures extends JSONFile {
 	public String getRandomCarID(int randomNumber) {
 		final List<String> keyList = new ArrayList<>(carsMap.keySet());
 		
-		return keyList.get(Math.round(((randomNumber%100)/100) * keyList.size()));
+		return keyList.get((int)Math.round(((randomNumber%100)/100D) * keyList.size()));
 	}
 	
 	public String getRandomTrucksID(int randomNumber) {
 		final List<String> keyList = new ArrayList<>(trucksMap.keySet());
 		
-		return keyList.get(Math.round(((randomNumber%100)/100) * keyList.size()));
+		return keyList.get((int)Math.round(((randomNumber%100)/100D) * keyList.size()));
 	}
 	
 	public Texture getRandomCarTexture(int randomNumber) {

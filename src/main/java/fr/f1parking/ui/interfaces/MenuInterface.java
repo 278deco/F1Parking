@@ -1,4 +1,4 @@
-package fr.f1parking.ui;
+package fr.f1parking.ui.interfaces;
 
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
@@ -14,24 +14,22 @@ import javafx.util.Duration;
 
 import java.io.File;
 
-public class MenuInterface {
+import fr.f1parking.ui.Animation;
+import fr.f1parking.ui.Coordinator;
+
+public class MenuInterface implements IInterface {
 
     private Button exit;
 
 
     private Scene scene_menue;
 
-    private Animation animation;
+    private Animation leftAnimation, rightAnimation;
 
-    private int animation_duration;
+    public MenuInterface (final Coordinator c) {
 
-    private String color;
-
-    private int position;
-
-    public MenuInterface (final Coordinator c){
-
-        animation = new Animation(c.getCarManager().getCar_list());
+    	leftAnimation = new Animation();
+    	rightAnimation = new Animation();
 
         GridPane root_menue = new GridPane(); //contains column used to divide
         GridPane center_gridpane = new GridPane(); // contains buttons center pos
@@ -51,7 +49,7 @@ public class MenuInterface {
         //left column
         ColumnConstraints left_transition = new ColumnConstraints();//left transition in the menu
         left_transition.setPrefWidth(c.getWIDTH()/3);
-        File left_background_file = new File("src/resources/img/left_brackground.png");
+        File left_background_file = new File("datas/img/left_bg.png");
         Image right_Img = new Image(left_background_file.toURI().toString(),c.getWIDTH()/3, c.getHEIGHT(), false, true);
         BackgroundImage left_bImg = new BackgroundImage(right_Img,
                 BackgroundRepeat.NO_REPEAT,
@@ -64,16 +62,12 @@ public class MenuInterface {
         left_container.setPrefSize(c.getWIDTH()/3, c.getHEIGHT());
         root_menue.add(left_container, 0,0);
 
-
-
-
-
         // right column
         ColumnConstraints right_transition = new ColumnConstraints(); //right transition in the menue
         right_transition.setPrefWidth(c.getWIDTH()/3);
         FlowPane right_container = new FlowPane();
-        right_container.setPrefSize(c.getWIDTH()/3, c.getHEIGHT());
-        File right_background_file = new File("src/resources/img/rect31.png");
+        
+        File right_background_file = new File("datas/img/right_bg.png");
         Image right_img = new Image(right_background_file.toURI().toString(),c.getWIDTH()/3, c.getHEIGHT(), false, true);
         BackgroundImage right_bImg = new BackgroundImage(right_img,
                 BackgroundRepeat.NO_REPEAT,
@@ -82,6 +76,7 @@ public class MenuInterface {
                 BackgroundSize.DEFAULT);
         Background bGround = new Background(right_bImg);
         right_container.setBackground(bGround);
+        right_container.setPrefSize(c.getWIDTH()/3, c.getHEIGHT());
         root_menue.add(right_container, 2, 0);
 
 
@@ -139,37 +134,51 @@ public class MenuInterface {
         center_gridpane.add(bottom_center, 1,2);
 
 
-        animation.randomizeImage();
-
+        leftAnimation.randomizeImage();
+        rightAnimation.randomizeImage();
 
         // transition and flowpane inside
-        TranslateTransition menue_translatetransition = new TranslateTransition(Duration.seconds(1), animation.getAnimationView());
-        menue_translatetransition.setFromY(750);
-        menue_translatetransition.setToY(-500);
-        menue_translatetransition.setInterpolator(Interpolator.LINEAR);
-        menue_translatetransition.setOnFinished(event -> {
-            animation.randomizeImage();
-            menue_translatetransition.setDuration(Duration.seconds(animation.getCar_speed()));
-            menue_translatetransition.play();
-        });
-
-        FlowPane imageview_container = new FlowPane(animation.getAnimationView());
-
-        imageview_container.setAlignment(Pos.TOP_LEFT);
-        imageview_container.setAlignment(Pos.CENTER);
-        right_container.getChildren().add(imageview_container);
+        TranslateTransition translateTransitionLeft = createNewAnimation(leftAnimation, 750, -500);
+        
+        FlowPane leftTransitionContainer = new FlowPane(leftAnimation.getAnimationView());
+        leftTransitionContainer.setAlignment(Pos.TOP_LEFT);
+        leftTransitionContainer.setAlignment(Pos.CENTER);
+        
+        left_container.getChildren().add(leftTransitionContainer);
+        
+        TranslateTransition translateTransitionRight = createNewAnimation(rightAnimation, 750, -500);
+        
+        FlowPane rightTransitionContainer = new FlowPane(rightAnimation.getAnimationView());
+        rightTransitionContainer.setAlignment(Pos.TOP_LEFT);
+        rightTransitionContainer.setAlignment(Pos.CENTER);
+        right_container.getChildren().add(rightTransitionContainer);
 
 
         bottom_center.getChildren().add(exit);
         root_menue.add(center_gridpane, 1,0);
         center_gridpane.getRowConstraints().addAll(top, middle, bottom);
         root_menue.getColumnConstraints().addAll(left_transition,front_menu, right_transition);
-        menue_translatetransition.play();
-
-
+        
+        translateTransitionLeft.play();
+        translateTransitionRight.play();
 
         scene_menue = new Scene(root_menue,c.getWIDTH(), c.getHEIGHT());
     }
+    
+    public TranslateTransition createNewAnimation(Animation animClass, int y0, int y1) {
+    	final TranslateTransition t =  new TranslateTransition(Duration.seconds(1), animClass.getAnimationView());
+        t.setFromY(y0);
+        t.setToY(y1);
+        t.setInterpolator(Interpolator.LINEAR);
+        t.setOnFinished(event -> {
+        	animClass.randomizeImage();
+            t.setDuration(Duration.seconds(animClass.getCar_speed()));
+            t.play();
+        });
+        
+        return t;
+    }
+    
     public void btnHover(Button btn) {
         btn.hoverProperty( ).addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -205,9 +214,6 @@ public class MenuInterface {
 
     */
 
-
-
-
     public Button getExit() {
         return exit;
     }
@@ -215,8 +221,10 @@ public class MenuInterface {
     public void setExit(Button exit) {
         this.exit = exit;
     }
-    public Scene getScene_menue() {
-        return scene_menue;
+   
+    @Override
+    public Scene getInterface() {
+    	return this.scene_menue;
     }
 }
 

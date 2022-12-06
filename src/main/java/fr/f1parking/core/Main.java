@@ -3,6 +3,7 @@ package fr.f1parking.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.level.Difficulty;
 import fr.f1parking.core.level.gen.RandomSeed;
 import fr.f1parking.core.level.gen.backtracking.Tree;
@@ -20,7 +21,7 @@ public class Main {
 	private static final Logger LOGGER = LogManager.getLogger(Main.class);
 	
 	public static void main(String[] args) {
-//		IOHandler.getInstance();
+		IOHandler.getInstance();
 //		
 //		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 //			

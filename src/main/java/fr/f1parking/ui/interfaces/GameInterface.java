@@ -1,5 +1,6 @@
-package fr.f1parking.ui;
+package fr.f1parking.ui.interfaces;
 
+import fr.f1parking.ui.Coordinator;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,7 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class Game_Interface {
+public class GameInterface implements IInterface {
 
     private Scene game_scene;
 
@@ -26,7 +27,7 @@ public class Game_Interface {
     private Stage game_stage;
 
 
-    public Game_Interface(final Coordinator d){
+    public GameInterface(final Coordinator d){
 
         //initialize scene
 
@@ -215,9 +216,12 @@ public class Game_Interface {
 
 
     }
-    public Scene getGame_scene() {
-        return game_scene;
+
+    @Override
+    public Scene getInterface() {
+	    return this.game_scene;
     }
+    
     public Button button_style (Button bouton){
         bouton.setPrefSize(80, 80);
         bouton.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px; -fx-font-size: 20px ");

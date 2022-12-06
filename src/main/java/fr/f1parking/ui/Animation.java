@@ -1,8 +1,9 @@
 package fr.f1parking.ui;
 
-import java.util.List;
 import java.util.Random;
 
+import fr.f1parking.core.io.IOHandler;
+import fr.f1parking.ui.render.Texture;
 import javafx.scene.image.ImageView;
 
 public class Animation {
@@ -11,25 +12,19 @@ public class Animation {
 
 
     private int car_speed;
-    private List<Car> carList;
 
     private int car_position;
 
-    public Animation(List<Car> carList) {
+    public Animation() {
         this.animation_imageView = new ImageView();
-        this.carList = carList;
     }
-
-
-
-
 
     public void randomizeImage() {
         // car randomizer
 
         Random nr = new Random();
-        int idImg = nr.nextInt(carList.size());
-        animation_imageView.setImage(carList.get(idImg).getCarImage());
+        Texture texture = IOHandler.getInstance().getTexturesFile().getRandomCarTexture(nr.nextInt(100000));
+        animation_imageView.setImage(texture.copy().loadImage(500, 500));
 
         this.car_speed = nr.nextInt(1, 8);
         this.car_position = nr.nextInt(10, 20);

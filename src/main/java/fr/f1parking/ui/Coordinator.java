@@ -1,7 +1,10 @@
 package fr.f1parking.ui;
 import java.io.File;
 
-import fr.f1parking.utiles.Cars;
+import fr.f1parking.ui.interfaces.GameInterface;
+import fr.f1parking.ui.interfaces.HightscoreInterface;
+import fr.f1parking.ui.interfaces.IntroInterface;
+import fr.f1parking.ui.interfaces.MenuInterface;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -20,41 +23,35 @@ public class Coordinator extends Application {
     private int WIDTH = 1280;
     private int HEIGHT = 720;
 
-    private Game_Interface game_interface;
+    private GameInterface game_interface;
 
     private MenuInterface menue_interface;
 
-    private Hightscore_Interface hightscore_interface;
+    private HightscoreInterface hightscore_interface;
 
-    private Intro_Interface intro_interface;
-
-    private Animation animation;
-
+    private IntroInterface intro_interface;
+    
     private Stage primaryStage;
-
-    private Cars carsList;
-
 
     private int scene_indicator;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        carsList = new Cars("src/resources/img/");
-
+        
         menue_interface = new MenuInterface(this);
-        game_interface = new Game_Interface(this);
-        hightscore_interface = new Hightscore_Interface(this);
-        intro_interface = new Intro_Interface(this);
+        game_interface = new GameInterface(this);
+        hightscore_interface = new HightscoreInterface(this);
+        intro_interface = new IntroInterface(this);
 
 
-        File icon_file = new File("src/resources/img/Park_The_F1.png");
+        File icon_file = new File("datas/img/logo.png");
         Image icon = new Image(icon_file.toURI().toString(),0.2*WIDTH,0.2*HEIGHT,false,true);
         primaryStage.getIcons().add(icon);
 
 
         primaryStage.setTitle("Unpark the F1");
-        primaryStage.setScene(intro_interface.getIntro_scene());
+        primaryStage.setScene(menue_interface.getInterface());
         primaryStage.setResizable(false);
         primaryStage.show();
 
@@ -63,24 +60,24 @@ public class Coordinator extends Application {
         scene_indicator = i;
         switch (i){
             case 1:
-                primaryStage.setScene(game_interface.getGame_scene());
+                primaryStage.setScene(game_interface.getInterface());
                 break;
             case 2:
-                primaryStage.setScene(menue_interface.getScene_menue());
+                primaryStage.setScene(menue_interface.getInterface());
                 break;
             case 3:
-                primaryStage.setScene(hightscore_interface.getHightscore_scene());
+                primaryStage.setScene(hightscore_interface.getInterface());
                 break;
             case 4:
-                primaryStage.setScene(intro_interface.getIntro_scene());
+                primaryStage.setScene(intro_interface.getInterface());
         }
 
     }
 
-    public Cars getCarManager() {
-        return carsList;
+    public int getScene_indicator(){ 
+    	return scene_indicator;
     }
-    public int getScene_indicator(){ return scene_indicator;}
+    
     public Stage getPrimaryStage() {
         return primaryStage;
     }

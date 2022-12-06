@@ -1,11 +1,18 @@
 package fr.f1parking.ui.render;
 
+import java.io.File;
+import java.util.Optional;
+
+import javafx.scene.image.Image;
+
 public class Texture {
 	
 	private String textureName;
 	
 	private String path;
 	private String fileName;
+	
+	private Image image;
 	
 	/**
 	 * Create a new Texture object
@@ -18,6 +25,21 @@ public class Texture {
 		
 		this.fileName = fileName;
 		this.path = path;
+
+	}
+	
+	public Texture copy() {
+		return new Texture(this.textureName, this.path, this.fileName);
+	}
+	
+	public Image loadImage(int sizeX, int sizeY) {
+		if(this.image == null || (sizeX != this.image.getWidth() || sizeY != this.image.getHeight())) 
+			this.image = new Image(new File(getFullPath()).toURI().toString(), sizeX, sizeY, true, false);
+		return this.image;
+	}
+	
+	public Optional<Image> getImage() {
+		return Optional.of(this.image);
 	}
 	
 	/**
@@ -49,6 +71,6 @@ public class Texture {
 	 * @return the full path
 	 */
 	public String getFullPath() {
-		return this.path +"/"+ this.fileName;
+		return this.path +File.separator+ this.fileName;
 	}
 }

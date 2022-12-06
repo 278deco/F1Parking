@@ -1,0 +1,48 @@
+{
+	"cars": {
+		"alphaRomeo": {
+			"path": "datas/img/cars",
+			"file": "alfa_romeo.png"
+		},
+		"alphaTauri": {
+			"path": "datas/img/cars",
+			"file": "alfa_tauri.png"
+		},
+		"alpineBlue": {
+			"path": "datas/img/cars",
+			"file": "alpine_blue.png"
+		},
+		"alpinePink": {
+			"path": "datas/img/cars",
+			"file": "alpine_pink.png"
+		},
+		"astonMartin": {
+			"path": "datas/img/cars",
+			"file": "aston_martin.png"
+		},
+		"ferrari": {
+			"path": "datas/img/cars",
+			"file": "ferrari.png"
+		},
+		"hass": {
+			"path": "datas/img/cars",
+			"file": "hass.png"
+		},
+		"mcLarren": {
+			"path": "datas/img/cars",
+			"file": "mc_larren.png"
+		},
+		"mercedes": {
+			"path": "datas/img/cars",
+			"file": "mercedes.png"
+		},
+		"redbull": {
+			"path": "datas/img/cars",
+			"file": "redbull.png"
+		},
+		"williams": {
+			"path": "datas/img/cars",
+			"file": "williams.png"
+		}
+	}
+}

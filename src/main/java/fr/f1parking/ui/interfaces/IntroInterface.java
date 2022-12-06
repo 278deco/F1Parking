@@ -1,7 +1,8 @@
-package fr.f1parking.ui;
+package fr.f1parking.ui.interfaces;
 
 import java.io.File;
 
+import fr.f1parking.ui.Coordinator;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
@@ -9,7 +10,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
 
-public class Intro_Interface {
+public class IntroInterface implements IInterface {
 
     private Scene intro_scene;
 
@@ -17,13 +18,13 @@ public class Intro_Interface {
 
     private boolean out_intro;
 
-    public Intro_Interface(final Coordinator f){
+    public IntroInterface(final Coordinator f){
 
         Group root = new Group();
 
         out_intro = false;
 
-        Media intro_video = new Media(new File("src/resources/mp3_files/F1 2020 intro _FLUTE_.mp4").toURI().toString());
+        Media intro_video = new Media(new File("datas/video-files/game_intro.mp4").toURI().toString());
         mediaplayer = new MediaPlayer(intro_video);
         if (f.getScene_indicator() == 4){
             mediaplayer.play();
@@ -48,7 +49,7 @@ public class Intro_Interface {
 
         }
 
-        mediaplayer.setAutoPlay(true);
+        //mediaplayer.setAutoPlay(true);
         MediaView view = new MediaView(mediaplayer);
         root.setOnMouseClicked(event -> {
             mediaplayer.stop();
@@ -61,8 +62,12 @@ public class Intro_Interface {
 
 
     }
-    public Scene getIntro_scene() {
-        return intro_scene;
+    
+    @Override
+    public Scene getInterface() {
+    	mediaplayer.setAutoPlay(true);
+    	
+    	return this.intro_scene;
     }
 
 }
