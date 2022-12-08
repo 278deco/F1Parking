@@ -293,8 +293,6 @@ public class GameInterface implements IInterface {
 	private void displayGame(GridPane gamePane) {
 		final GridBox[][] gridMap = this.gameMap.getMapCopy();
 		
-		System.out.println(RendererHelper.renderMap("non", gridMap, this.npcEntities, this.player));
-		
 		for(int y = 0; y < IGenerator.GRID_SIZE; y++) {
 			for(int x = 0; x < IGenerator.GRID_SIZE; x++) {
 				final FlowPane pane = new FlowPane();

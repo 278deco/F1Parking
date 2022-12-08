@@ -69,7 +69,7 @@ public class MenuInterface implements IInterface {
 		root_menue.add(left_container, 0, 0);
 
 		// right column
-		ColumnConstraints right_transition = new ColumnConstraints(); // right transition in the menue
+		ColumnConstraints right_transition = new ColumnConstraints(); // right transition in the menu
 		right_transition.setPrefWidth(c.getWIDTH() / 3);
 		FlowPane right_container = new FlowPane();
 
@@ -83,8 +83,7 @@ public class MenuInterface implements IInterface {
 		right_container.setPrefSize(c.getWIDTH() / 3, c.getHEIGHT());
 		root_menue.add(right_container, 2, 0);
 
-		// front column
-		ColumnConstraints front_menu = new ColumnConstraints();// Vbox used to place buttons
+		ColumnConstraints front_menu = new ColumnConstraints();
 		front_menu.setPrefWidth(c.getWIDTH() / 3);
 
 		/*
@@ -186,14 +185,6 @@ public class MenuInterface implements IInterface {
 
 		return t;
 	}
-
-	/*
-	 * public int car_position (int position){ if (animation.getCar_position() >
-	 * 10){ position = 1; }else{ position = 2; } return position;
-	 * 
-	 * }
-	 * 
-	 */
 
 	public Button getExit() {
 		return exit;
