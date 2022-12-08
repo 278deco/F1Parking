@@ -13,9 +13,13 @@ public class JSONTextures extends JSONFile {
 	private final Map<String, Texture> carsMap;
 	private final Map<String, Texture> trucksMap;
 	
+	public final Texture MISSING_TEXTURE;
+	
 	@SuppressWarnings("unchecked")
 	public JSONTextures(String path) {
 		super(path, "textures.json");
+		
+		this.MISSING_TEXTURE = new Texture("missingTexture", "datas/img", "missing_texture.png");
 		
 		carsMap = new HashMap<>();
 		trucksMap = new HashMap<>();
@@ -32,7 +36,6 @@ public class JSONTextures extends JSONFile {
 				}
 			}
 		}
-		LOGGER.info(carsMap);
 		if(getData().containsKey("trucks")) {
 			for(Map.Entry<String, Object> entry : ((HashMap<String, Object>) getData().get("trucks")).entrySet()) {
 				try {
@@ -52,29 +55,31 @@ public class JSONTextures extends JSONFile {
 	
 	public Texture getCarTexture(String carID) {
 		if(carsMap.containsKey(carID)) {
-			return carsMap.get(carID);
+			return carsMap.get(carID).copy();
 		}
-		throw new NullPointerException("The car's texture doesn't exist !");
+		LOGGER.warn("Couldn't find requested car's texture (name: "+carID+")");
+		return MISSING_TEXTURE;
 	}
 	
 	public Texture getTruckTexture(String truckID) {
 		if(trucksMap.containsKey(truckID)) {
-			return trucksMap.get(truckID);
+			return trucksMap.get(truckID).copy();
 		}
-		throw new NullPointerException("The truck's texture doesn't exist !");
+		LOGGER.warn("Couldn't find requested truck's texture (name: "+truckID+")");
+		return MISSING_TEXTURE;
 	}
 	
 	
 	public String getRandomCarID(int randomNumber) {
 		final List<String> keyList = new ArrayList<>(carsMap.keySet());
 		
-		return keyList.get((int)Math.round(((randomNumber%100)/100D) * keyList.size()));
+		return keyList.get((int)Math.round(((randomNumber%100)/100D) * (keyList.size()-1)));
 	}
 	
 	public String getRandomTrucksID(int randomNumber) {
 		final List<String> keyList = new ArrayList<>(trucksMap.keySet());
 		
-		return keyList.get((int)Math.round(((randomNumber%100)/100D) * keyList.size()));
+		return keyList.get((int)Math.round(((randomNumber%100)/100D) * (keyList.size()-1)));
 	}
 	
 	public Texture getRandomCarTexture(int randomNumber) {

@@ -72,4 +72,19 @@ public enum Direction {
 				return new Coordinate(0,0);
 		}
 	}
+	
+	public double getRotation() {
+		switch(this) {
+			case NORTH:
+				return 0D;
+			case SOUTH:
+				return 180D;
+			case EAST:
+				return 90D;
+			case WEST:
+				return 270D;
+			default:
+				return 0D;
+		}
+	}
 }

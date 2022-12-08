@@ -41,6 +41,7 @@ public class ProceduralPlacingLayer implements ILayer {
 		this.generator = null;
 		this.isPrecalculated = false;
 		this.entityCountExceptPlayer = -1;
+		this.entitiesList = new ArrayList<>();
 	}
 	
 	@Override
@@ -116,7 +117,8 @@ public class ProceduralPlacingLayer implements ILayer {
 					if(infos[0] == 1) entity = Optional.of(generateEntity(infos[1], Direction.of(infos[2]), new Coordinate(x,y)));
 					
 					for(byte i = 0; i < infos[1]; i++) {
-						if(entity.isPresent()) tempGridBox.add(new GridBox().addNewEntity(infos[0] == 1 ? entity.get().getId() : this.player.getId(), i == 0));
+						if(infos[0] == 1 && entity.isPresent()) tempGridBox.add(new GridBox().addNewEntity(entity.get().getId(), i == 0));
+						else if(infos[0] == 2) tempGridBox.add(new GridBox().addNewEntity(this.player.getId(), i == 0));
 						else throw new NullPointerException("Couldn't find the right entity when generating the map (Coords: "+new Coordinate(x,y)+", "
 								+ "Obj[type: "+infos[0]+", size: "+infos[1]+", dir: "+Direction.of(infos[2])+"])");
 					}

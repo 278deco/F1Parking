@@ -1,6 +1,6 @@
 package fr.f1parking.core.entities.placement;
 
-import fr.f1parking.core.utils.Tuple;
+import fr.f1parking.utils.Tuple;
 
 /**
  * Used to store an X and Y value representing a coordinate

@@ -46,8 +46,16 @@ public abstract class Entity {
 	 * Return the texture's name used by the car
 	 * @return the texture name
 	 */
-	public Texture getTextureName() {
+	public Texture getTexture() {
 		return this.texture;
+	}
+	
+	/**
+	 * Return the texture's name used by the car
+	 * @return the texture name
+	 */
+	public String getTextureName() {
+		return this.texture.getFileName();
 	}
 	
 	/**

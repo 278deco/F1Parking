@@ -1,4 +1,4 @@
-package fr.f1parking.core.utils;
+package fr.f1parking.utils;
 
 import java.util.Arrays;
 import java.util.List;

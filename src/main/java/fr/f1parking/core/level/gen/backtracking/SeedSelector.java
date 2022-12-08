@@ -32,14 +32,19 @@ public class SeedSelector {
 				this.offset = this.seed.getSeed() & 0xf; //Generate the offset selector by taking the first 4 bits
 				this.randomByte = (this.seed.getSeed() >> this.offset) & 0xff; //Generate the random byte using the offset and taking 8 bits
 				
-				if(version != 0) this.base = this.base + (this.offset* (version/10));
+				if(version != 0) {
+//					System.out.println("calc: "+(long)(this.offset* (version/10D)));
+//					System.out.println("base: " +this.base);
+					this.base = this.base + (long)(this.offset* (version/10D));
+//					System.out.println("base: " +this.base);
+				}
 				break;
 			case BYTE_64:
 				this.base = this.seed.getSeed() >> 44; //Generate the base selector using the 20 first right bits of the seed
 				this.offset = this.seed.getSeed() >> 0x3f; //Generate the offset selector by taking the first 6 bits
 				this.randomByte = (this.seed.getSeed() >> this.offset) & 0xff; //Generate the random byte using the offset and taking 8 bits
 				
-				if(version != 0) this.base = this.base + (this.offset* (version/10));
+				if(version != 0) this.base = this.base + (long)(this.offset* (version/10D));
 				break;
 		}
 	}
@@ -77,15 +82,22 @@ public class SeedSelector {
 		return Direction.of((int)(this.base%3 + this.seed.getSeed() >> (this.seed.getSeedBitsNumber().getWeight()-(requestIncremental % 10))) %3);
 	}
 	
-	public Texture getEntityTexture(byte entitySize, Coordinate coords) {
-		final int number = (int)this.randomByte * (coords.getX()/10) + coords.getY();
-		
+	public Texture getEntityTexture(byte entitySize, Coordinate coords) {		
 		Texture ret = null;
 		String playerTextureID = IOHandler.getInstance().getConfiguration().getPlayerCar();
+		int versioning = 0;
+		
+		//System.out.println("NBEUHGH: " +number);
 		
 		do {
+			int number = (int)(this.randomByte * (coords.getX()/10D)) + (coords.getY()*Math.min(1, versioning));
+			
 			ret = IOHandler.getInstance().getTexturesFile().getRandomCarTexture(number);
+			
+			versioning+=1;
 		}while(ret.equals(IOHandler.getInstance().getTexturesFile().getCarTexture(playerTextureID)));
+		
+		System.out.println("Texture: " +ret);
 		
 		return ret;
 	}

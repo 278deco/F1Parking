@@ -73,4 +73,9 @@ public class Texture {
 	public String getFullPath() {
 		return this.path +File.separator+ this.fileName;
 	}
+	
+	@Override
+	public String toString() {
+		return "Texture:[path: "+this.path+", file: "+this.fileName+"]";
+	}
 }

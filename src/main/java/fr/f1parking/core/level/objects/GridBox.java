@@ -8,22 +8,21 @@ public class GridBox {
 	
 	private final List<GridBox> occupiedNeighbor;
 	private boolean rootBox;
-	private UUID entityID;
 	
+	private UUID entityID;
+
 	public GridBox() {
 		this.occupiedNeighbor = new ArrayList<>();
 	}
 	
-	public GridBox addNewEntity(UUID id, boolean isRoot) {
-		this.entityID = id;
+	public GridBox addNewEntity(UUID entity, boolean isRoot) {
+		this.entityID = entity;
 		this.rootBox = isRoot;
 		return this;
 	}
 	
-	public GridBox addNewEntity(UUID id) {
-		this.entityID = id;
-		this.rootBox = false;
-		return this;
+	public GridBox addNewEntity(UUID entity) {
+		return addNewEntity(entity, false);
 	}
 	
 	public GridBox addNewNeighbor(GridBox... neighborBoxs) {

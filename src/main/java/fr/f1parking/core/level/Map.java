@@ -42,14 +42,14 @@ public class Map extends AbstractMap {
 	}
 
 	public boolean moveEntity(Entity e, Direction dir) {
-		if(!DeplacementHelper.isAValidDirection(e.getFacingDirection(), dir)) throw new IllegalArgumentException("The entity cannot move in this direction");
+		if(!DeplacementHelper.isAValidDirection(e.getFacingDirection(), dir)) return false;
 		final Coordinate coords = MapHelper.doesMapContains(getMap(), e);
 		if(coords == null) {
 			throw new UndefinedPlayerException("The entity doesn't exist in this grid");
 		}else {
 			final Coordinate[] coordsValues = DeplacementHelper.getEntityMovingBoxes(coords, dir, e.getFacingDirection(), (byte)e.getSize());
 			if(!coordsValues[1].withinInterval(new Coordinate(0,0), new Coordinate(IGenerator.GRID_SIZE-1, IGenerator.GRID_SIZE-1))) {
-				throw new IllegalArgumentException("The entity cannot move in this direction");
+				return false;
 			}else {
 				if(isEmpty(coordsValues[1])) {
 					set(coordsValues[1], new GridBox().addNewEntity(e.getId())); //Create the new grid containing the entity

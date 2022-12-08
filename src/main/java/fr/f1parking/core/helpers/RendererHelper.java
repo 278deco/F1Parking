@@ -12,8 +12,10 @@ import fr.f1parking.core.level.objects.GridBox;
 public class RendererHelper {
 
 	public static String renderMap(String name, GridBox[][] map, List<Entity> entitiesPNJ, EntityPlayer pl) {
-		entitiesPNJ.add(pl);
-		return renderMap(name, map, entitiesPNJ);
+		List<Entity> entities = new ArrayList<>(entitiesPNJ);
+		entities.add(pl);
+		
+		return renderMap(name, map, entities);
 	}
 	
 	public static String renderMap(String name, GridBox[][] map, List<Entity> entities) {

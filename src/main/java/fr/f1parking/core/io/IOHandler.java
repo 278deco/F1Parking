@@ -22,7 +22,6 @@ public class IOHandler {
 	private final JSONTextures textures;
 	private final JSONHighscore highscore;
 	
-	
 	private IOHandler() {
 		this.pathToSaveable = new File("datas");
 		if(this.pathToSaveable.mkdirs()) LOGGER.info("Directory "+this.pathToSaveable.getAbsolutePath()+" has been successfully created !");

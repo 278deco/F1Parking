@@ -1,5 +1,9 @@
 package fr.f1parking.ui;
+
 import java.io.File;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import fr.f1parking.ui.interfaces.GameInterface;
 import fr.f1parking.ui.interfaces.HightscoreInterface;
@@ -11,74 +15,84 @@ import javafx.stage.Stage;
 
 public class Coordinator extends Application {
 
-    public int getWIDTH() {
-        return WIDTH;
-    }
+	private final Logger LOGGER = LogManager.getLogger(Coordinator.class);
 
-    public int getHEIGHT() {
-        return HEIGHT;
-    }
+	// application dimension
+	private int WIDTH = 1280;
+	private int HEIGHT = 720;
 
-    //application dimension
-    private int WIDTH = 1280;
-    private int HEIGHT = 720;
+	private File logoFile;
 
-    private GameInterface game_interface;
+	private GameInterface game_interface;
+	private MenuInterface menue_interface;
+	private HightscoreInterface hightscore_interface;
+	private IntroInterface intro_interface;
 
-    private MenuInterface menue_interface;
+	private Stage primaryStage;
 
-    private HightscoreInterface hightscore_interface;
+	private int scene_indicator;
 
-    private IntroInterface intro_interface;
-    
-    private Stage primaryStage;
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		this.primaryStage = primaryStage;
 
-    private int scene_indicator;
+		logoFile = new File("datas/img/logo.png");
+		Image icon = new Image(logoFile.toURI().toString(), 0.2 * WIDTH, 0.2 * HEIGHT, false, true);
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
-        
-        menue_interface = new MenuInterface(this);
-        game_interface = new GameInterface(this);
-        hightscore_interface = new HightscoreInterface(this);
-        intro_interface = new IntroInterface(this);
+		menue_interface = new MenuInterface(this);
+		game_interface = new GameInterface(this);
+		hightscore_interface = new HightscoreInterface(this);
+		intro_interface = new IntroInterface(this);
 
+		primaryStage.getIcons().add(icon);
 
-        File icon_file = new File("datas/img/logo.png");
-        Image icon = new Image(icon_file.toURI().toString(),0.2*WIDTH,0.2*HEIGHT,false,true);
-        primaryStage.getIcons().add(icon);
+		primaryStage.setTitle("(Un)park the F1");
+		primaryStage.setScene(menue_interface.getInterface());
+		primaryStage.setResizable(false);
+		primaryStage.show();
 
+	}
 
-        primaryStage.setTitle("Unpark the F1");
-        primaryStage.setScene(menue_interface.getInterface());
-        primaryStage.setResizable(false);
-        primaryStage.show();
+	public void change_scene(int i) {
+		this.scene_indicator = i;
+		switch (i) {
+		case 1:
+			primaryStage.setScene(game_interface.getInterface());
+			break;
+		case 2:
+			primaryStage.setScene(menue_interface.getInterface());
+			break;
+		case 3:
+			primaryStage.setScene(hightscore_interface.getInterface());
+			break;
+		case 4:
+			primaryStage.setScene(intro_interface.getInterface());
+			break;
+		}
 
-    }
-    public void change_scene(int i){
-        scene_indicator = i;
-        switch (i){
-            case 1:
-                primaryStage.setScene(game_interface.getInterface());
-                break;
-            case 2:
-                primaryStage.setScene(menue_interface.getInterface());
-                break;
-            case 3:
-                primaryStage.setScene(hightscore_interface.getInterface());
-                break;
-            case 4:
-                primaryStage.setScene(intro_interface.getInterface());
-        }
+	}
 
-    }
+	public Logger getLogger() {
+		return LOGGER;
+	}
 
-    public int getScene_indicator(){ 
-    	return scene_indicator;
-    }
-    
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
+	public File getLogoFile() {
+		return this.logoFile;
+	}
+
+	public int getScene_indicator() {
+		return scene_indicator;
+	}
+
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public int getWIDTH() {
+		return WIDTH;
+	}
+
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
 }

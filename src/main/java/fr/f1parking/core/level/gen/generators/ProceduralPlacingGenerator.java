@@ -8,7 +8,7 @@ import fr.f1parking.core.level.gen.IGenerator;
 import fr.f1parking.core.level.gen.backtracking.SeedSelector;
 
 public class ProceduralPlacingGenerator implements IGenerator {
-
+	
 	private final byte[][] grid;
 	private final SeedSelector selector;
 	
@@ -32,6 +32,8 @@ public class ProceduralPlacingGenerator implements IGenerator {
 		
 		final int truckNumber = Math.round(selector.getEntityNumber()*(selector.getTruckPercentage()/100));
 		final int carNumber = selector.getEntityNumber()-truckNumber;
+		
+		System.out.println(selector.getEntityNumber());
 		
 		for(int i= 0; i < selector.getEntityNumber(); i++) {
 			final Coordinate coord = selector.getEntityCoordinate();

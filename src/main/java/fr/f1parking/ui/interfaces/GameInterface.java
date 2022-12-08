@@ -1,247 +1,407 @@
 package fr.f1parking.ui.interfaces;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.f1parking.core.entities.Car;
+import fr.f1parking.core.entities.Entity;
+import fr.f1parking.core.entities.EntityPlayer;
+import fr.f1parking.core.entities.Truck;
+import fr.f1parking.core.entities.placement.Coordinate;
+import fr.f1parking.core.entities.placement.Direction;
+import fr.f1parking.core.helpers.DeplacementHelper;
+import fr.f1parking.core.helpers.MapHelper;
+import fr.f1parking.core.helpers.RendererHelper;
+import fr.f1parking.core.io.IOHandler;
+import fr.f1parking.core.level.Map;
+import fr.f1parking.core.level.gen.IGenerator;
+import fr.f1parking.core.level.gen.generators.ManualPlacingGenerator;
+import fr.f1parking.core.level.gen.layers.ManualPlacingLayer;
+import fr.f1parking.core.level.objects.GridBox;
 import fr.f1parking.ui.Coordinator;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import fr.f1parking.ui.helpers.CSSHelper;
+import fr.f1parking.ui.helpers.GameInterfaceHelper;
+import fr.f1parking.ui.objects.GameFlowPane;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GameInterface implements IInterface {
+	
+	private CongratulationModal congratulationModal;
+	private Dialog<String> errorDeplacementBox;
+	
+	//Front
+	private Scene game_scene;
+	private GridPane game_root;
+	
+	private List<GameFlowPane> gameMapUI;
+	private FlowPane selectedEntityPane;
+	private final Button buttonZ, buttonQ, buttonS, buttonD;
+	
+	//Back
+	private Map gameMap;
+	private List<Entity> npcEntities;
+	private EntityPlayer player;
+	
+	private int playerMoveCount = 0;
+	
+	private void initDialogBox(Coordinator coord) {
+		errorDeplacementBox = new Dialog<>();
+		
+		errorDeplacementBox.setTitle("Erreur");
+		errorDeplacementBox.getDialogPane().getButtonTypes().add(new ButtonType("C'est compris !", ButtonData.OK_DONE));
+		((Stage)errorDeplacementBox.getDialogPane().getScene().getWindow())
+			.getIcons().add(new Image(coord.getLogoFile().toURI().toString(), 0.2 * coord.getWIDTH(), 0.2 * coord.getHEIGHT(), false, true));
+	}
+	
+	public GameInterface(final Coordinator d) {
+		this.congratulationModal = new CongratulationModal(d);
 
-    private Scene game_scene;
+		this.gameMapUI = new ArrayList<>();
+		this.selectedEntityPane = null;
+		
+		initDialogBox(d);
+		setupBackGame();
+	
+		// initialize scene
 
+		GridPane first_gridpane = new GridPane();
+		this.game_scene = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT()); //Define the game scene
+		
+		first_gridpane.setStyle("-fx-background-color: #333333ff");
+		ColumnConstraints first_gridpane_left_column = new ColumnConstraints();
+		first_gridpane_left_column.setPercentWidth(20);
+		ColumnConstraints first_gridpane_center_column = new ColumnConstraints();
+		first_gridpane_center_column.setPercentWidth(60);
+		ColumnConstraints first_gridpane_right_column = new ColumnConstraints();
+		first_gridpane_right_column.setPercentWidth(20);
 
-    private Stage game_stage;
+		RowConstraints first_gridpane_top_row = new RowConstraints();
+		first_gridpane_top_row.setPercentHeight(5);
+		RowConstraints first_gridpane_center_row = new RowConstraints();
+		first_gridpane_center_row.setPercentHeight(90);
+		RowConstraints first_gridpane_bottom_row = new RowConstraints();
+		first_gridpane_bottom_row.setPercentHeight(5);
 
+		//VBox to set button to the left
 
-    public GameInterface(final Coordinator d){
+		VBox buttonPane = new VBox();
+		buttonPane.setAlignment(Pos.CENTER);
 
-        //initialize scene
+		// column used in left gridpane
 
-        GridPane first_gridpane = new GridPane();
-        first_gridpane.setStyle("-fx-background-color: #333333ff");
-        ColumnConstraints first_gridpane_left_column = new ColumnConstraints();
-        first_gridpane_left_column.setPercentWidth(20);
-        ColumnConstraints first_gridpane_center_column = new ColumnConstraints();
-        first_gridpane_center_column.setPercentWidth(60);
-        ColumnConstraints first_gridpane_right_column = new ColumnConstraints();
-        first_gridpane_right_column.setPercentWidth(20);
+		ColumnConstraints left = new ColumnConstraints();
+		left.setPercentWidth(33);
+		ColumnConstraints center = new ColumnConstraints();
+		center.setPercentWidth(33);
+		ColumnConstraints right = new ColumnConstraints();
+		right.setPercentWidth(33);
 
-        RowConstraints first_gridpane_top_row = new RowConstraints();
-        first_gridpane_top_row.setPercentHeight(5);
-        RowConstraints first_gridpane_center_row = new RowConstraints();
-        first_gridpane_center_row.setPercentHeight(90);
-        RowConstraints first_gridpane_bottom_row = new RowConstraints();
-        first_gridpane_bottom_row.setPercentHeight(5);
+		// row used in left gridpane
 
-        // gridpane to set button on the left
+		RowConstraints left_top = new RowConstraints();
+		left_top.setPercentHeight(50);
+		RowConstraints left_center = new RowConstraints();
+		left_center.setPercentHeight(20);
+		RowConstraints left_bottom = new RowConstraints();
+		left_bottom.setPercentHeight(30);
 
-        GridPane left_gridpane = new GridPane();
-        left_gridpane.setGridLinesVisible(true);
+		first_gridpane.add(buttonPane, 0, 1);
+		
+		first_gridpane.getColumnConstraints().addAll(first_gridpane_left_column, first_gridpane_center_column,
+				first_gridpane_right_column);
+		first_gridpane.getRowConstraints().addAll(first_gridpane_top_row, first_gridpane_center_row,
+				first_gridpane_bottom_row);
 
-        // column used in left gridpane
+		// initialize inside game
+		game_root = new GridPane();
+		//game_root.setGridLinesVisible(true);
+		game_root.setAlignment(Pos.CENTER);
+		ColumnConstraints game_column1 = new ColumnConstraints();
+		// game_column1.setPrefWidth(flowtest.getWidth()/6);
+		game_column1.setPercentWidth(16);
+		ColumnConstraints game_colun2 = new ColumnConstraints();
+		// game_colun2.setPrefWidth(flowtest.getWidth()/6);
+		game_colun2.setPercentWidth(16);
+		ColumnConstraints game_colun3 = new ColumnConstraints();
+		// game_colun3.setPrefWidth(flowtest.getWidth()/6);
+		game_colun3.setPercentWidth(16);
+		ColumnConstraints game_colun4 = new ColumnConstraints();
+		// game_colun4.setPrefWidth(flowtest.getWidth()/6);
+		game_colun4.setPercentWidth(16);
+		ColumnConstraints game_colun5 = new ColumnConstraints();
+		// game_colun5.setPrefWidth(flowtest.getWidth()/6);
+		game_colun5.setPercentWidth(16);
+		ColumnConstraints game_colun6 = new ColumnConstraints();
+		// game_colun6.setPrefWidth(flowtest.getWidth()/6);
+		game_colun6.setPercentWidth(16);
+		game_root.setStyle("-fx-background-color: #6c42f5");
 
-        ColumnConstraints left = new ColumnConstraints();
-        left.setPercentWidth(33);
-        ColumnConstraints center = new ColumnConstraints();
-        center.setPercentWidth(33);
-        ColumnConstraints right = new ColumnConstraints();
-        right.setPercentWidth(33);
+		// row matrix
 
-        // row used in left gridpane
+		RowConstraints game_rowA = new RowConstraints();
 
-        RowConstraints left_top = new RowConstraints();
-        left_top.setPercentHeight(50);
-        RowConstraints left_center = new RowConstraints();
-        left_center.setPercentHeight(20);
-        RowConstraints left_bottom = new RowConstraints();
-        left_bottom.setPercentHeight(30);
+		game_rowA.setPercentHeight(16);
+		RowConstraints game_rowB = new RowConstraints();
 
-        left_gridpane.getRowConstraints().addAll(left_top, left_center, left_bottom);
-        left_gridpane.getColumnConstraints().addAll(left, center, right);
-        first_gridpane.add(left_gridpane, 0,1);
+		game_rowB.setPercentHeight(16);
+		RowConstraints game_rowC = new RowConstraints();
 
+		game_rowC.setPercentHeight(16);
+		RowConstraints game_rowD = new RowConstraints();
 
+		game_rowD.setPercentHeight(16);
+		RowConstraints game_rowE = new RowConstraints();
 
-        first_gridpane.getColumnConstraints().addAll(first_gridpane_left_column,first_gridpane_center_column, first_gridpane_right_column);
-        first_gridpane.getRowConstraints().addAll(first_gridpane_top_row, first_gridpane_center_row, first_gridpane_bottom_row);
+		game_rowE.setPercentHeight(16);
+		RowConstraints game_rowF = new RowConstraints();
 
+		game_rowF.setPercentHeight(16);
+		game_root.getRowConstraints().addAll(game_rowA, game_rowB, game_rowC, game_rowD, game_rowE, game_rowF);
+		game_root.getColumnConstraints().addAll(game_column1, game_colun2, game_colun3, game_colun4, game_colun5,
+				game_colun6);
+		first_gridpane.add(game_root, 1, 1);
 
-        //initialize inside game
-        GridPane game_root = new GridPane();
-        game_root.setGridLinesVisible(true);
-        game_root.setAlignment(Pos.CENTER);
-        ColumnConstraints game_column1 = new ColumnConstraints();
-        //game_column1.setPrefWidth(flowtest.getWidth()/6);
-        game_column1.setPercentWidth(16);
-        ColumnConstraints game_colun2 = new ColumnConstraints();
-        //game_colun2.setPrefWidth(flowtest.getWidth()/6);
-        game_colun2.setPercentWidth(16);
-        ColumnConstraints game_colun3 = new ColumnConstraints();
-        //game_colun3.setPrefWidth(flowtest.getWidth()/6);
-        game_colun3.setPercentWidth(16);
-        ColumnConstraints game_colun4 = new ColumnConstraints();
-        //game_colun4.setPrefWidth(flowtest.getWidth()/6);
-        game_colun4.setPercentWidth(16);
-        ColumnConstraints game_colun5 = new ColumnConstraints();
-        //game_colun5.setPrefWidth(flowtest.getWidth()/6);
-        game_colun5.setPercentWidth(16);
-        ColumnConstraints game_colun6 = new ColumnConstraints();
-        //game_colun6.setPrefWidth(flowtest.getWidth()/6);
-        game_colun6.setPercentWidth(16);
-        game_root.setStyle("-fx-background-color: #6c42f5");
+		/*
+		 * BUTTONS
+		 */
+		
+		buttonZ = new Button("Z");
+		buttonZ.setOnAction(event -> { onMovingButtonClick(Direction.NORTH); });
+		CSSHelper.setButtonStyle(buttonZ, 80, 80);
+		CSSHelper.setButtonOnHover(this.game_scene, buttonZ, 80, 80);
+		
+		buttonPane.getChildren().add(buttonZ);
 
+		HBox movingButtonRow = new HBox(); // The row containing Q, S, D
+		movingButtonRow.setAlignment(Pos.CENTER);
+		movingButtonRow.setPadding(new Insets(5));
+		movingButtonRow.setSpacing(5);
+		
+		buttonQ = new Button("Q");
+		buttonQ.setOnAction(event -> { onMovingButtonClick(Direction.WEST); });
+		CSSHelper.setButtonStyle(buttonQ, 80, 80);
+		CSSHelper.setButtonOnHover(this.game_scene, buttonQ, 80, 80);
+		
+		buttonS = new Button("S");
+		buttonS.setOnAction(event -> { onMovingButtonClick(Direction.SOUTH); });
+		CSSHelper.setButtonStyle(buttonS, 80, 80);
+		CSSHelper.setButtonOnHover(this.game_scene, buttonS, 80, 80);
 
+		buttonD = new Button("D");
+		buttonD.setOnAction(event -> { onMovingButtonClick(Direction.EAST); });
+		CSSHelper.setButtonStyle(buttonD, 80, 80);
+		CSSHelper.setButtonOnHover(this.game_scene, buttonD, 80, 80);
 
+		movingButtonRow.getChildren().addAll(buttonQ, buttonS, buttonD);
+		
+		buttonPane.getChildren().add(movingButtonRow);
 
-        //row matrix
+		Button exit = new Button("Retour au menu");
+		CSSHelper.setButtonStyle(exit, 200, 30);
+		CSSHelper.setButtonOnHover(this.game_scene, exit, 200, 30);
 
-        RowConstraints game_rowA = new RowConstraints();
-        //game_rowA.setPrefHeight(flowtest.getHeight()/6);
-        game_rowA.setPercentHeight(16);
-        RowConstraints game_rowB = new RowConstraints();
-        //game_rowB.setPrefHeight(flowtest.getHeight()/6);
-        game_rowB.setPercentHeight(16);
-        RowConstraints game_rowC = new RowConstraints();
-        //game_rowC.setPrefHeight(flowtest.getHeight()/6);
-        game_rowC.setPercentHeight(16);
-        RowConstraints game_rowD = new RowConstraints();
-        //game_rowD.setPrefHeight(flowtest.getHeight()/6);
-        game_rowD.setPercentHeight(16);
-        RowConstraints game_rowE = new RowConstraints();
-        //game_rowE.setPrefHeight(flowtest.getHeight()/6);
-        game_rowE.setPercentHeight(16);
-        RowConstraints game_rowF = new RowConstraints();
-        //game_rowF.setPrefHeight(flowtest.getHeight()/6);
-        game_rowF.setPercentHeight(16);
-        game_root.getRowConstraints().addAll(game_rowA, game_rowB, game_rowC, game_rowD, game_rowE, game_rowF);
-        game_root.getColumnConstraints().addAll(game_column1,game_colun2,game_colun3,game_colun4,game_colun5,game_colun6);
-        first_gridpane.add(game_root, 1,1);
+		exit.setAlignment(Pos.CENTER);
+		exit.setOnAction(event -> {
+			d.change_scene(2);
+		});
+		
+		first_gridpane.add(exit, 2, 1);
+		GridPane.setHalignment(exit, HPos.CENTER);
+		GridPane.setValignment(exit, VPos.TOP);
+		
+		displayGame(game_root);
+		
+		this.game_scene.setOnKeyPressed(event -> {
+			switch(event.getCode()) {
+				case Z:
+					if(selectedEntityPane != null)
+						onMovingButtonClick(Direction.NORTH);
+					break;
+				case Q:
+					if(selectedEntityPane != null)
+						onMovingButtonClick(Direction.WEST);
+					break;
+				case S:
+					if(selectedEntityPane != null)
+						onMovingButtonClick(Direction.SOUTH);
+					break;
+				case D:
+					if(selectedEntityPane != null)
+						onMovingButtonClick(Direction.EAST);
+					break;
+				default:
+					break;
+			}
+		});
+	}
 
-        //button
+	private void setupBackGame() {
+		this.player = new EntityPlayer();
+		this.npcEntities = new ArrayList<>();
+		npcEntities.add(new Truck(Direction.EAST, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck1")));
+		npcEntities.add(new Truck(Direction.EAST, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck2")));
+		npcEntities.add(new Truck(Direction.NORTH, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck4")));
+		npcEntities.add(new Truck(Direction.NORTH, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck3")));
+		npcEntities.add(new Car(Direction.EAST, IOHandler.getInstance().getTexturesFile().getCarTexture("alpineBlue")));
+		
+		
+		ManualPlacingGenerator generator = ManualPlacingGenerator.builder()
+				.placement(0, 2, 2, 2, Direction.EAST) // Player
+				.placement(0, 0, 1, 3, Direction.EAST) // Truck 1
+				.placement(3, 0, 1, 3, Direction.EAST) // Truck 2
+				.placement(3, 4, 1, 3, Direction.NORTH) // Truck 3
+				.placement(4, 4, 1, 2, Direction.EAST) // Car 1
+				.placement(5, 3, 1, 3, Direction.NORTH) // Truck 4
+				.build();
+		
+		ManualPlacingLayer layer = ManualPlacingLayer.builder()
+				.entities(npcEntities).player(player)
+				.build();
+		
+		this.gameMap = Map.builder()
+				.generator(generator)
+				.layer(layer)
+				.name("Niveau 4")
+				.build();
+		
+//		this.gameTree = Tree.builder()
+//				.seed(new RandomSeed())
+//				.difficulty(Difficulty.EASY)
+//				.build();
+//		
+//		this.gameTree.generateMap();
+	}
+	
+	private void displayGame(GridPane gamePane) {
+		final GridBox[][] gridMap = this.gameMap.getMapCopy();
+		
+		System.out.println(RendererHelper.renderMap("non", gridMap, this.npcEntities, this.player));
+		
+		for(int y = 0; y < IGenerator.GRID_SIZE; y++) {
+			for(int x = 0; x < IGenerator.GRID_SIZE; x++) {
+				final FlowPane pane = new FlowPane();
+				pane.setAlignment(Pos.CENTER);
+				pane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0, 3 ;");
+				
+				if(gridMap[y][x].isEntityPresent()) {
+					final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gridMap[y][x].getEntityID());
+					
+					final ImageView iv = new ImageView(e.getTexture().loadImage(100, 100));
+					iv.setRotate(e.getFacingDirection().getRotation());
+					
+					pane.getChildren().add(iv);
+					addEntityAction(pane);
+					
+					this.gameMapUI =  GameInterfaceHelper.addPaneToRightGameFlowPane(this.gameMapUI, e, pane);
+				}
+				
+				gamePane.add(pane, x, y);
+				
+			}
+		}
+	}
+	
+	private void onMovingButtonClick(Direction movement) {
+		if(selectedEntityPane == null) {
+			errorDeplacementBox.setContentText("Merci de s\u00e9lectionner le v\u00e9hicule \u00e0 d\u00e9placer !");
+			errorDeplacementBox.showAndWait();
+			return;
+		}
+		final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, GameInterfaceHelper.getRightFlowPane(this.gameMapUI, selectedEntityPane).getEntityId());
+		
+		if(e.equals(this.player) && MapHelper.isPlayerFinished(movement, MapHelper.doesMapContains(this.gameMap.getMapCopy(), e), this.player.getSize())) {
+			congratulationModal.addMoveCount(this.playerMoveCount);
+			congratulationModal.show();
+		}else {
+			if(this.gameMap.moveEntity(e, movement)) {
+				this.playerMoveCount+=1;
+				
+				gameMapUI.clear();
+				selectRightDirectionButton(Direction.NULL, null);
+				selectedEntityPane = null;
+				displayGame(this.game_root);
+			}else {
+				errorDeplacementBox.setContentText("Ce d\u00e9placement n'est pas possible pour ce v\u00e9hicule !");
+				errorDeplacementBox.showAndWait();
+			}
+		}
+	}
+	
+	private void addEntityAction(FlowPane pane) {
+		pane.setOnMouseClicked(event -> {
+			if(event.getButton() != MouseButton.PRIMARY) return;
+			
+			if(selectedEntityPane != pane) {
+				if(selectedEntityPane != null) 
+					for(FlowPane flowPane : GameInterfaceHelper.getRightFlowPane(this.gameMapUI, selectedEntityPane).getFlowplaneList()) 
+						flowPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
+			
+				final GameFlowPane gameFlowPane = GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane);
+				final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gameFlowPane.getEntityId());
+				
+				for(int i = 0; i < gameFlowPane.getFlowplaneList().size(); i++)
+					gameFlowPane.getFlowplaneList().get(i).setStyle("-fx-background-color: red, white; -fx-background-insets: 0, "+calculateInsets(i, gameFlowPane.getFlowplaneList().size(), e.getFacingDirection())+" ;");
+				
+				selectedEntityPane = pane;
+				selectRightDirectionButton(e.getFacingDirection(), MapHelper.doesMapContains(this.gameMap.getMapCopy(), e));
+			}else {
+				for(FlowPane flowPane : GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane).getFlowplaneList()) 
+					flowPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
+				selectedEntityPane = null;
+				selectRightDirectionButton(Direction.NULL, null);
+			}
+		}); 
+	}
+	
+	private void selectRightDirectionButton(Direction entityDir, Coordinate entityPos) {
+		if(entityDir == Direction.NORTH || entityDir == Direction.SOUTH) {
+			buttonZ.setDisable(DeplacementHelper.isAValidMovement(entityPos, entityDir, Direction.NORTH) ? false : true); 
+			buttonS.setDisable(DeplacementHelper.isAValidMovement(entityPos, entityDir, Direction.SOUTH) ? false : true);
+			
+			buttonQ.setDisable(true); buttonD.setDisable(true);
+		}else if(entityDir == Direction.WEST || entityDir == Direction.EAST) {
+			buttonQ.setDisable(DeplacementHelper.isAValidMovement(entityPos, entityDir, Direction.WEST) ? false : true); 
+			buttonD.setDisable(DeplacementHelper.isAValidMovement(entityPos, entityDir, Direction.EAST) ? false : true);
 
-        Button Z = new Button("Z");
-        button_style(Z);
-        left_gridpane.add(Z, 1,1);
-        GridPane.setHalignment(Z, HPos.CENTER);
-        btnHover(Z);
-        Button Q = new Button("Q");
-        button_style(Q);
-        left_gridpane.add(Q, 0,2);
-        GridPane.setHalignment(Q, HPos.CENTER);
-        GridPane.setValignment(Q, VPos.TOP);
-        btnHover(Q);
-        Button S = new Button("S");
-        button_style(S);
-        left_gridpane.add(S, 1,2);
-        GridPane.setHalignment(S, HPos.CENTER);
-        GridPane.setValignment(S, VPos.TOP);
-        btnHover(S);
-        Button D = new Button("D");
-        button_style(D);
-        left_gridpane.add(D, 2,2);
-        GridPane.setHalignment(D, HPos.CENTER);
-        GridPane.setValignment(D, VPos.TOP);
-        btnHover(D);
-
-        Button exit = new Button("exit");
-        btnHover(exit);
-        exit.setPrefSize(150, 60);
-        exit.setAlignment(Pos.CENTER);
-        exit.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px");
-        exit.setOnAction(event -> {
-            d.change_scene(2);
-        });
-        first_gridpane.add(exit, 2, 0);
-        GridPane.setHalignment(exit, HPos.CENTER);
-
-        Button btn = new Button();
-        btn.setText("Open Dialog");
-        btn.setOnAction(
-                new EventHandler<ActionEvent>() {
-
-                    public void handle(ActionEvent event) {
-                        final Stage dialog = new Stage();
-                        dialog.initModality(Modality.APPLICATION_MODAL);
-                        dialog.initOwner(game_stage);
-                        VBox dialogVbox = new VBox(20);
-                        HBox top = new HBox();
-                        HBox bottom = new HBox();
-                        Label congrats = new Label("congratulation, you won");
-                        //congrats.setStyle();
-                        Button return_menu = new Button("click to return");
-                        return_menu.setOnAction(event1 -> {
-                            d.change_scene(2);
-                        });
-                        Button exit = new Button("exit game");
-                        exit.setOnAction(event1 -> {
-                            Platform.exit();
-
-                        });
-                        top.getChildren().add(congrats);
-                        bottom.getChildren().addAll(return_menu, exit);
-                        dialogVbox.getChildren().addAll(top, bottom);
-                        Scene dialogScene = new Scene(dialogVbox, 500, 400);
-                        dialog.setScene(dialogScene);
-                        dialog.show();
-                    }
-                });
-        first_gridpane.add(btn, 2,2);
-        GridPane.setValignment(btn, VPos.CENTER);
-
-
-
-
-
-
-
-
-
-        game_scene = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT());
-
-       // MenuBar Game_menuebar = new MenuBar()
-
-
-    }
-
-    @Override
-    public Scene getInterface() {
-	    return this.game_scene;
-    }
-    
-    public Button button_style (Button bouton){
-        bouton.setPrefSize(80, 80);
-        bouton.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px; -fx-font-size: 20px ");
-        return bouton;
-    }
-    public void btnHover(Button btn) {
-        btn.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                btn.setStyle("-fx-background-color: #424040; -fx-text-fill: white; -fx-font-size: 20px;-fx-background-radius: 20px");
-                btn.setEffect(new javafx.scene.effect.DropShadow(10, Color.web("#000000")));
-                game_scene.setCursor(javafx.scene.Cursor.HAND);
-            } else {
-                btn.setStyle(null);
-                btn.setEffect(null);
-                btn.setPrefSize(80, 80);
-                btn.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px; -fx-font-size: 20px ");
-                game_scene.setCursor(javafx.scene.Cursor.DEFAULT);
-            }
-        });
-
-
-    }
+			buttonZ.setDisable(true); buttonS.setDisable(true);
+		}else {
+			buttonZ.setDisable(false); buttonS.setDisable(false);
+			buttonQ.setDisable(false); buttonD.setDisable(false);
+		}
+	}
+	
+	private String calculateInsets(int index, int size, Direction facing) {
+		if(facing == Direction.EAST || facing ==Direction.WEST) {
+			if(index == 0) return "3 0 3 3";
+			else if(index == size-1) return "3 3 3 0";
+			else return "3 0 3 0";
+		}else {
+			if(index == 0) return "3 3 0 3";
+			else if(index == size-1) return "0 3 3 3";
+			else return "0 3 0 3";
+		}
+	}
+	
+	@Override
+	public Scene getInterface() {
+		return this.game_scene;
+	}
 }

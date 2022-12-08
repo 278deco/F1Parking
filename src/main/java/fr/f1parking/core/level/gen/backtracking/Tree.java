@@ -45,10 +45,10 @@ public class Tree {
 		this.selector = new SeedSelector(this.seed, this.difficulty, this.selectorVersion);
 
 		this.generator = ProceduralPlacingGenerator.builder()
-				.seedSelector(selector)
+				.seedSelector(this.selector)
 				.build();
 		this.layer = ProceduralPlacingLayer.builder()
-				.seedSelector(selector)
+				.seedSelector(this.selector)
 				.player(player)
 				.build();
 	}
@@ -63,7 +63,7 @@ public class Tree {
 			try {
 				map = new NodeMap(this.generator, this.layer);
 			}catch(Exception e) {
-				LOGGER.info("Error occured while generating map (V: "+this.selectorVersion+")",e);
+				LOGGER.info("Error occured while generating map (V: "+this.selectorVersion+", Seed: "+this.seed.getSeed()+")",e);
 				this.selectorVersion+=1;
 				generateElements();
 				
@@ -72,11 +72,6 @@ public class Tree {
 		}
 		
 		mapsList.add(map);
-	}
-
-	//ONLY FOR TEST PURPOSE
-	public void testRender() {
-		this.mapsList.get(0).testRender(this.layer.getEntities().get(), this.player);
 	}
 	
 	public static Tree.Builder builder() {

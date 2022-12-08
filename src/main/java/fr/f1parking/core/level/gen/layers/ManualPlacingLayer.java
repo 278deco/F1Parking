@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fr.f1parking.core.entities.Entity;
 import fr.f1parking.core.entities.EntityPlayer;
 import fr.f1parking.core.entities.placement.Coordinate;
@@ -21,6 +24,9 @@ import fr.f1parking.core.level.objects.GridBox;
 
 public class ManualPlacingLayer implements ILayer {
 
+	@SuppressWarnings("unused")
+	private Logger LOGGER = LogManager.getLogger(ManualPlacingLayer.class);
+	
 	private List<Entity> entitiesList;
 	private EntityPlayer player;
 	
@@ -64,6 +70,7 @@ public class ManualPlacingLayer implements ILayer {
 						else throw new MultiplePlayerDefinitionException("Two player have been defined by the generator", Optional.empty());
 						this.entityCountExceptPlayer-=1; 
 					}
+					
 					
 					Coordinate result = null;
 					for(byte i = infos[1]; i > 0; i--) {
@@ -111,8 +118,9 @@ public class ManualPlacingLayer implements ILayer {
 				if(posNb != 0) {
 					List<GridBox> tempGridBox = new ArrayList<>();
 					
+				
 					for(byte i = 0; i < infos[1]; i++) {
-						
+					
 						tempGridBox.add(new GridBox()
 								.addNewEntity(infos[0] == 1 ? this.entitiesList.get(entityIndex).getId() : this.player.getId(), i == 0));
 					}

@@ -1,7 +1,7 @@
 package fr.f1parking.core.entities;
 
 import fr.f1parking.core.entities.placement.Direction;
-import fr.f1parking.core.utils.EntitiesTexture;
+import fr.f1parking.core.io.IOHandler;
 
 public class EntityPlayer extends Car {
 	
@@ -11,7 +11,7 @@ public class EntityPlayer extends Car {
 	 * EAST and the texture used is player's texture</p>
 	 */
 	public EntityPlayer() {
-		super(Direction.EAST, EntitiesTexture.PLAYER_TEXTURE);
+		super(Direction.EAST, IOHandler.getInstance().getTexturesFile().getCarTexture(IOHandler.getInstance().getConfiguration().getPlayerCar()));
 	}
 	
 }

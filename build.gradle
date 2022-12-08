@@ -49,4 +49,4 @@ dependencies {
 
 }
 
-mainClassName='fr.f1parking.core.Main'
+mainClassName='fr.f1parking.Main'

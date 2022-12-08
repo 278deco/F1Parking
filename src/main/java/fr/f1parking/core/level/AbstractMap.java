@@ -59,7 +59,7 @@ public abstract class AbstractMap {
 	 * modify the current map</p>
 	 * @return a GridBox Array
 	 */
-	protected GridBox[][] getMapCopy() {
+	public GridBox[][] getMapCopy() {
 		final GridBox[][] copy = new GridBox[this.gridMap.length][];
 		for(int y = 0; y < this.gridMap.length; y++) copy[y] = this.gridMap[y].clone();
 		

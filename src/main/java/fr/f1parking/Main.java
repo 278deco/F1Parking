@@ -1,4 +1,4 @@
-package fr.f1parking.core;
+package fr.f1parking;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +9,7 @@ import fr.f1parking.core.level.gen.RandomSeed;
 import fr.f1parking.core.level.gen.backtracking.Tree;
 import fr.f1parking.ui.Coordinator;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 public class Main {
 	
@@ -22,15 +23,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		IOHandler.getInstance();
-//		
-//		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				LOGGER.info("Shutting down program...");
-//				IOHandler.getInstance().saveAllFiles();
-//			}
-//		}, "Shutdown Thread"));
 //		
 //		generateTreeMap();
 //		
@@ -62,6 +54,13 @@ public class Main {
 //		LOGGER.info(map.moveEntity(entities.get(1), Direction.SOUTH));
 //				
 //		map.testRender(entities, player);
+	}
+	
+	public static void stopProgram() {
+		LOGGER.info("Shutting down program...");
+		
+		IOHandler.getInstance().saveAllFiles();
+		Platform.exit();
 	}
 	
 	public static void generateTreeMap() {

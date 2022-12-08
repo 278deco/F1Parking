@@ -2,6 +2,7 @@ package fr.f1parking.core.helpers;
 
 import fr.f1parking.core.entities.placement.Coordinate;
 import fr.f1parking.core.entities.placement.Direction;
+import fr.f1parking.core.level.gen.IGenerator;
 
 public class DeplacementHelper {
 
@@ -24,6 +25,12 @@ public class DeplacementHelper {
 				ret = false;
 		}
 		return ret || wantedDir == playerDir;
+	}
+	
+	public static boolean isAValidMovement(Coordinate playerCoord, Direction playerDir, Direction wantDir) {
+		boolean ret = isAValidDirection(playerDir, wantDir);
+		
+		return ret || playerCoord.withinInterval(new Coordinate(1,1), new Coordinate(IGenerator.GRID_SIZE-1, IGenerator.GRID_SIZE-1));
 	}
 	
 	public static Coordinate[] getEntityMovingBoxes(Coordinate eCoord, Direction movingDirection, Direction facingDirection, byte size) {
