@@ -23,6 +23,7 @@ public abstract class JSONFile {
 
 	/**
 	 * Create a new JSON file instance
+	 * 
 	 * @param path - the path of the file
 	 * @param fileName - the file name with the extension
 	 */
@@ -46,11 +47,12 @@ public abstract class JSONFile {
 
 	/**
 	 * Save the file and write the content
+	 * 
 	 * @throws IOException
 	 */
 	public void saveFile() throws IOException {
 		preSave();
-
+		
 		new Thread(new Runnable() {
 
 			@Override
@@ -58,6 +60,7 @@ public abstract class JSONFile {
 				try {
 					FileWriter fw = new FileWriter(path);
 
+					LOGGER.info(dataMap);
 					fw.write(FILES_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(dataMap));
 
 					fw.flush();
@@ -76,6 +79,7 @@ public abstract class JSONFile {
 	/**
 	 * Reload the file instance running in the program
 	 * Any change made to the original file that are not saved will be overwritten
+	 * 
 	 * @throws IOException
 	 */
 	public void reloadFile() throws IOException {
@@ -86,6 +90,7 @@ public abstract class JSONFile {
 
 	/**
 	 * Get the file path (absolute path + file name)
+	 * 
 	 * @return a string containing path
 	 */
 	public String getFilePath() {
@@ -94,6 +99,7 @@ public abstract class JSONFile {
 
 	/**
 	 * Cast the raw file object to a JSONObject
+	 * 
 	 * @return a JSONObject representing the file
 	 */
 	protected HashMap<String, Object> getData() {
@@ -102,7 +108,7 @@ public abstract class JSONFile {
 
 	/**
 	 * Read the file's content
-	 * @return the content of the json file
+	 * 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
@@ -111,6 +117,7 @@ public abstract class JSONFile {
 		try {
 			this.dataMap = FILES_MAPPER.readValue(new File(this.path), HashMap.class);
 		}catch(Exception e) {
+			LOGGER.info(e);
 			this.dataMap = new HashMap<>();
 		}
 	}

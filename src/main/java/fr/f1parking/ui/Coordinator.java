@@ -50,12 +50,17 @@ public class Coordinator extends Application {
 		primaryStage.getIcons().add(icon);
 
 		primaryStage.setTitle("(Un)park the F1");
-		primaryStage.setScene(menue_interface.getInterface());
+		primaryStage.setScene(intro_interface.getInterface());
 		primaryStage.setResizable(false);
 		primaryStage.show();
 
 	}
-
+	
+	/**
+	 * Change the scene of the main window
+	 * 
+	 * @param i - the index of the new scene
+	 */
 	public void change_scene(int i) {
 		this.scene_indicator = i;
 		switch (i) {
@@ -66,6 +71,7 @@ public class Coordinator extends Application {
 			primaryStage.setScene(menue_interface.getInterface());
 			break;
 		case 3:
+			hightscore_interface.refresh(this);
 			primaryStage.setScene(hightscore_interface.getInterface());
 			break;
 		case 4:
@@ -77,6 +83,11 @@ public class Coordinator extends Application {
 
 	}
 	
+	/**
+	 * Load a new map in the game interface
+	 * 
+	 * @param mapId - the map's id
+	 */
 	public void loadSelectedMap(int mapId) {
 		this.game_interface.setupBackGame(mapId);
 	}

@@ -43,9 +43,10 @@ public abstract class AbstractMap {
 	
 	/**
 	 * <strong>Recommended for use inside the map class</strong>
-	 * <p> Return the map instance represented by a two-dimensional array </br>
+	 * <p> Return the map instance represented by a two-dimensional array <br>
 	 *  The array will now be cloned or copied, so any modification performed will
 	 * modify the current map</p>
+	 * 
 	 * @return a GridBox array
 	 */
 	protected GridBox[][] getMap() {
@@ -54,9 +55,10 @@ public abstract class AbstractMap {
 	
 	/**
 	 * <strong>Recommended for use outside of the map class</strong>
-	 * <p> Return the map instance represented by a two-dimensional array </br>
+	 * <p> Return the map instance represented by a two-dimensional array <br>
 	 * The array returned is a clone of the map so any modification perfomed won't
 	 * modify the current map</p>
+	 * 
 	 * @return a GridBox Array
 	 */
 	public GridBox[][] getMapCopy() {

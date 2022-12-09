@@ -89,11 +89,11 @@ public class CongratulationModal implements IInterface {
 		 */
 		
 		Button return_menu = new Button("Retour \u00e0 la s\u00e9lection");
-		CSSHelper.setButtonStyle(return_menu, 200, 30);
-		CSSHelper.setButtonOnHover(this.modalScene, return_menu, 200, 30);
+		CSSHelper.setButtonStyle(return_menu, 220, 30);
+		CSSHelper.setButtonOnHover(this.modalScene, return_menu, 220, 30);
 
 		return_menu.setOnAction(event1 -> {
-			coord.change_scene(2);
+			coord.change_scene(5);
 			this.modal.close();
 		});
 
@@ -115,7 +115,7 @@ public class CongratulationModal implements IInterface {
 		this.modal.setScene(this.modalScene);
 	}
 
-	public void addMoveCount(int playerMoveCount) {
+	public void addMoveCount(int playerMoveCount) {	
 		this.congratLabel.setText(String.valueOf(playerMoveCount));
 	}
 	
@@ -127,7 +127,4 @@ public class CongratulationModal implements IInterface {
 	public Scene getInterface() {
 		return modalScene;
 	}
-
-	
-
 }

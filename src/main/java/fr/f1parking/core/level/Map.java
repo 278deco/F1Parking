@@ -1,16 +1,13 @@
 package fr.f1parking.core.level;
 
-import java.util.List;
 import java.util.UUID;
 
 import fr.f1parking.core.entities.Entity;
-import fr.f1parking.core.entities.EntityPlayer;
 import fr.f1parking.core.entities.placement.Coordinate;
 import fr.f1parking.core.entities.placement.Direction;
 import fr.f1parking.core.exceptions.UndefinedPlayerException;
 import fr.f1parking.core.helpers.DeplacementHelper;
 import fr.f1parking.core.helpers.MapHelper;
-import fr.f1parking.core.helpers.RendererHelper;
 import fr.f1parking.core.level.gen.IGenerator;
 import fr.f1parking.core.level.gen.ILayer;
 import fr.f1parking.core.level.objects.GridBox;
@@ -18,7 +15,6 @@ import fr.f1parking.core.level.objects.GridBox;
 public class Map extends AbstractMap {
 	
 	private String name;
-	
 	
 	private Map(Map.Builder builder) {
 		this.id = builder.getid();
@@ -35,12 +31,14 @@ public class Map extends AbstractMap {
 		layer.precalculate();
 		this.defineMap(layer.generateGrid());
 	}
-	
-	//ONLY FOR TEST PURPOSE
-	public void testRender(List<Entity> e, EntityPlayer pl) {
-		System.out.println(RendererHelper.renderMap(getName(), getMap(), e, pl));
-	}
 
+	/**
+	 * Function used to move an entity contained on the grid
+	 * 
+	 * @param e - the entity to be moved
+	 * @param dir - the direction where the entity will move
+	 * @return if the action has been correctly performed
+	 */
 	public boolean moveEntity(Entity e, Direction dir) {
 		if(!DeplacementHelper.isAValidDirection(e.getFacingDirection(), dir)) return false;
 		final Coordinate coords = MapHelper.doesMapContains(getMap(), e);
@@ -65,21 +63,32 @@ public class Map extends AbstractMap {
 		}
 	}
 	
+	/**
+	 * Get the name of the map
+	 * 
+	 * @return map's name
+	 */
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	 * Used to create a new instance of Map using it builder
+	 * 
+	 * @return map's builder
+	 */
 	public static Map.Builder builder() {
 		return new Map.Builder();
 	}
 	
 	/**
 	 * Compare two maps and tell if they are equals or not
-	 * <p> Points of comparaison : </br>
-	 * The generator used </br>
-	 * The layer used </br>
+	 * <p> Points of comparaison : <br>
+	 * The generator used <br>
+	 * The layer used <br>
 	 * The name of the map</p>
 	 * 
+	 * @return if the two maps are equals
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -103,23 +112,43 @@ public class Map extends AbstractMap {
 			this.id = UUID.randomUUID();
 		}
 		
+		/**
+		 * Add the desired map's name to the builder
+		 * 
+		 * @param name - the map's name
+		 * @return this instance of Builder
+		 */
 		public Builder name(String name) {
 			this.name = name;
 			return this;
 		}
 		
+		/**
+		 * Add the desired generator to the builder
+		 * 
+		 * @param gen - the map's generator
+		 * @return this instance of Builders
+		 */
 		public Builder generator(IGenerator gen) {
 			this.generator = gen;
 			return this;
 		}
 		
+		/**
+		 * Add the desired layer to the builder
+		 * 
+		 * @param layer - the map's layer
+		 * @return this instance of Builder
+		 */
 		public Builder layer(ILayer layer) {
 			this.layer = layer;
 			return this;
 		}
 		
-		/*
+		/**
 		 * Build a new Map
+		 * 
+		 * @return an new instance of Map
 		 * @see fr.f1parking.core.level.Map
 		 */
 		public Map build() {

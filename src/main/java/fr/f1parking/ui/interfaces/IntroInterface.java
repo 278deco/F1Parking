@@ -33,7 +33,8 @@ public class IntroInterface implements IInterface {
 
 		mediaplayer.setOnEndOfMedia(() -> {
 			out_intro = true;
-
+		//mediaplayer.stop();
+			f.change_scene(2);
 		});
 		if (out_intro) {
 			mediaplayer.stop();

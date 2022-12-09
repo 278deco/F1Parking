@@ -2,6 +2,7 @@ package fr.f1parking.ui.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import fr.f1parking.core.entities.Entity;
 import fr.f1parking.core.entities.EntityPlayer;
@@ -9,6 +10,7 @@ import fr.f1parking.core.entities.placement.Coordinate;
 import fr.f1parking.core.entities.placement.Direction;
 import fr.f1parking.core.helpers.DeplacementHelper;
 import fr.f1parking.core.helpers.MapHelper;
+import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.level.Map;
 import fr.f1parking.core.level.MapLoader;
 import fr.f1parking.core.level.gen.IGenerator;
@@ -78,6 +80,7 @@ public class GameInterface implements IInterface {
 		// initialize scene
 
 		GridPane first_gridpane = new GridPane();
+		//first_gridpane.setGridLinesVisible(true);
 		this.game_scene = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT()); //Define the game scene
 		
 		first_gridpane.setStyle("-fx-background-color: #333333ff");
@@ -127,7 +130,7 @@ public class GameInterface implements IInterface {
 
 		// initialize inside game
 		game_root = new GridPane();
-		//game_root.setGridLinesVisible(true);
+
 		game_root.setAlignment(Pos.CENTER);
 		ColumnConstraints game_column1 = new ColumnConstraints();
 		// game_column1.setPrefWidth(flowtest.getWidth()/6);
@@ -147,31 +150,40 @@ public class GameInterface implements IInterface {
 		ColumnConstraints game_colun6 = new ColumnConstraints();
 		// game_colun6.setPrefWidth(flowtest.getWidth()/6);
 		game_colun6.setPercentWidth(16);
+		ColumnConstraints gameColumExitCons = new ColumnConstraints();
+		gameColumExitCons.setPercentWidth(0.5);
+		
 		game_root.setStyle("-fx-background-color: #6c42f5");
 
 		// row matrix
 
 		RowConstraints game_rowA = new RowConstraints();
-
 		game_rowA.setPercentHeight(16);
+		
 		RowConstraints game_rowB = new RowConstraints();
-
 		game_rowB.setPercentHeight(16);
+		
 		RowConstraints game_rowC = new RowConstraints();
-
 		game_rowC.setPercentHeight(16);
+		
 		RowConstraints game_rowD = new RowConstraints();
-
 		game_rowD.setPercentHeight(16);
+		
 		RowConstraints game_rowE = new RowConstraints();
-
 		game_rowE.setPercentHeight(16);
+		
 		RowConstraints game_rowF = new RowConstraints();
-
 		game_rowF.setPercentHeight(16);
+		
 		game_root.getRowConstraints().addAll(game_rowA, game_rowB, game_rowC, game_rowD, game_rowE, game_rowF);
 		game_root.getColumnConstraints().addAll(game_column1, game_colun2, game_colun3, game_colun4, game_colun5,
-				game_colun6);
+				game_colun6, gameColumExitCons);
+		
+		//Exit indicator
+		final FlowPane exitFlow = new FlowPane();
+		exitFlow.setStyle("-fx-background-color: green"); //
+		game_root.add(exitFlow, IGenerator.GRID_SIZE, (int)(IGenerator.GRID_SIZE-1)/2);
+		
 		first_gridpane.add(game_root, 1, 1);
 
 		/*
@@ -210,8 +222,8 @@ public class GameInterface implements IInterface {
 		buttonPane.getChildren().add(movingButtonRow);
 
 		Button exit = new Button("Retour \u00e0 la s\u00e9lection");
-		CSSHelper.setButtonStyle(exit, 200, 30);
-		CSSHelper.setButtonOnHover(this.game_scene, exit, 200, 30);
+		CSSHelper.setButtonStyle(exit, 220, 30);
+		CSSHelper.setButtonOnHover(this.game_scene, exit, 220, 30);
 
 		exit.setAlignment(Pos.CENTER);
 		exit.setOnAction(event -> {
@@ -260,17 +272,11 @@ public class GameInterface implements IInterface {
 				.build();
 		
 		displayGame(game_root);
-		
-//		this.gameTree = Tree.builder()
-//				.seed(new RandomSeed())
-//				.difficulty(Difficulty.EASY)
-//				.build();
-//		
-//		this.gameTree.generateMap();
 	}
 	
 	private void displayGame(GridPane gamePane) {
 		final GridBox[][] gridMap = this.gameMap.getMapCopy();
+		final List<UUID> alreadyAdded = new ArrayList<>();
 		
 		for(int y = 0; y < IGenerator.GRID_SIZE; y++) {
 			for(int x = 0; x < IGenerator.GRID_SIZE; x++) {
@@ -279,21 +285,35 @@ public class GameInterface implements IInterface {
 				pane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0, 3 ;");
 				
 				if(gridMap[y][x].isEntityPresent()) {
-					final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gridMap[y][x].getEntityID());
-					
-					final ImageView iv = new ImageView(e.getTexture().loadImage(100, 100));
-					iv.setRotate(e.getFacingDirection().getRotation());
-					
-					pane.getChildren().add(iv);
-					addEntityAction(pane);
-					
-					this.gameMapUI =  GameInterfaceHelper.addPaneToRightGameFlowPane(this.gameMapUI, e, pane);
+					if(!alreadyAdded.contains(gridMap[y][x].getEntityID())) {
+						final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gridMap[y][x].getEntityID());
+						final ImageView iv = new ImageView(e.getTexture().loadImage(100, 100));
+						final Coordinate overflow = getRightOverflow(e);
+						
+						iv.setRotate(e.getFacingDirection().getRotation());
+						pane.getChildren().add(iv);
+						addEntityAction(pane);
+						
+						this.gameMapUI.add(new GameFlowPane(e.getId(), pane));
+						
+						gamePane.add(pane, x, y, overflow.getX(), overflow.getY());
+						alreadyAdded.add(e.getId());
+					}
+				}else {
+					gamePane.add(pane, x, y);
 				}
-				
-				gamePane.add(pane, x, y);
 				
 			}
 		}
+	}
+	
+	private Coordinate getRightOverflow(Entity e) {
+		if(e.getFacingDirection() == Direction.WEST || e.getFacingDirection() == Direction.EAST) {
+			return new Coordinate(e.getSize(), 1);
+		}else if(e.getFacingDirection() == Direction.NORTH || e.getFacingDirection() == Direction.SOUTH) {
+			return new Coordinate(1, e.getSize());
+		}
+		return new Coordinate(1, 1);	
 	}
 	
 	private void onMovingButtonClick(Direction movement) {
@@ -305,6 +325,7 @@ public class GameInterface implements IInterface {
 		final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, GameInterfaceHelper.getRightFlowPane(this.gameMapUI, selectedEntityPane).getEntityId());
 		
 		if(e.equals(this.player) && MapHelper.isPlayerFinished(movement, MapHelper.doesMapContains(this.gameMap.getMapCopy(), e), this.player.getSize())) {
+			IOHandler.getInstance().getHighscoreFile().addNewScore(this.gameMap.getName(), this.playerMoveCount);
 			congratulationModal.addMoveCount(this.playerMoveCount);
 			congratulationModal.show();
 		}else {
@@ -328,20 +349,17 @@ public class GameInterface implements IInterface {
 			
 			if(selectedEntityPane != pane) {
 				if(selectedEntityPane != null) 
-					for(FlowPane flowPane : GameInterfaceHelper.getRightFlowPane(this.gameMapUI, selectedEntityPane).getFlowplaneList()) 
-						flowPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
+					selectedEntityPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
 			
 				final GameFlowPane gameFlowPane = GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane);
 				final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gameFlowPane.getEntityId());
 				
-				for(int i = 0; i < gameFlowPane.getFlowplaneList().size(); i++)
-					gameFlowPane.getFlowplaneList().get(i).setStyle("-fx-background-color: red, white; -fx-background-insets: 0, "+calculateInsets(i, gameFlowPane.getFlowplaneList().size(), e.getFacingDirection())+" ;");
+				pane.setStyle("-fx-background-color: red, white; -fx-background-insets: 0, 3");
 				
 				selectedEntityPane = pane;
 				selectRightDirectionButton(e.getFacingDirection(), MapHelper.doesMapContains(this.gameMap.getMapCopy(), e));
 			}else {
-				for(FlowPane flowPane : GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane).getFlowplaneList()) 
-					flowPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
+				selectedEntityPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
 				selectedEntityPane = null;
 				selectRightDirectionButton(Direction.NULL, null);
 			}
@@ -362,18 +380,6 @@ public class GameInterface implements IInterface {
 		}else {
 			buttonZ.setDisable(false); buttonS.setDisable(false);
 			buttonQ.setDisable(false); buttonD.setDisable(false);
-		}
-	}
-	
-	private String calculateInsets(int index, int size, Direction facing) {
-		if(facing == Direction.EAST || facing ==Direction.WEST) {
-			if(index == 0) return "3 0 3 3";
-			else if(index == size-1) return "3 3 3 0";
-			else return "3 0 3 0";
-		}else {
-			if(index == 0) return "3 3 0 3";
-			else if(index == size-1) return "0 3 3 3";
-			else return "0 3 0 3";
 		}
 	}
 	

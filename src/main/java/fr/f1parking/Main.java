@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.level.MapLoader;
 import fr.f1parking.core.maps.Number1Map;
+import fr.f1parking.core.maps.Number2Map;
 import fr.f1parking.ui.Coordinator;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,34 +18,9 @@ public class Main {
 	public static void main(String[] args) {
 		IOHandler.getInstance();
 		
-		MapLoader.getInstance().addNewMap(new Number1Map());
+		MapLoader.getInstance().addNewMap(new Number1Map(), new Number2Map());
 		
 		Application.launch(Coordinator.class, args);
-		
-//		
-//		LOGGER.info(map.moveEntity(player, Direction.WEST));
-//		
-//		map.testRender(entities, player);
-//		
-//		LOGGER.info(map.moveEntity(player, Direction.WEST));
-//		
-//		map.testRender(entities, player);
-//		
-//		LOGGER.info(map.moveEntity(player, Direction.WEST));
-//		
-//		map.testRender(entities, player);
-//		
-//		LOGGER.info(map.moveEntity(player, Direction.EAST));
-//		
-//		map.testRender(entities, player);
-//		
-//		LOGGER.info(map.moveEntity(player, Direction.EAST));
-//				
-//		map.testRender(entities, player);
-//		
-//		LOGGER.info(map.moveEntity(entities.get(1), Direction.SOUTH));
-//				
-//		map.testRender(entities, player);
 	}
 	
 	public static void stopProgram() {
@@ -53,15 +29,6 @@ public class Main {
 		IOHandler.getInstance().saveAllFiles();
 		Platform.exit();
 	}
-	
-//	public static void generateTreeMap() {
-//		treeMap = Tree.builder()
-//			.seed(new RandomSeed())
-//			.difficulty(Difficulty.EASY)
-//			.build();
-//		
-//		treeMap.generateMap();
-//	}
 	
 	public static byte byteGen(byte obj, byte size, byte rot) {
 		return (byte)((obj<<6)+(size<<4)+rot);
@@ -74,32 +41,4 @@ public class Main {
 		
 		return new byte[] {obj,size,rot};
 	}
-	
-//	public static void generateMap() {
-//		player = new EntityPlayer();
-//		entities = new ArrayList<>();
-//		generateEntities(entities);
-//		
-//		ManualPlacingGenerator generator = ManualPlacingGenerator.builder()
-//				.placement(4, 2, 2, 2, Direction.EAST)
-//				.placement(0, 0, 1, 2, Direction.EAST)
-//				.placement(2, 2, 1, 3, Direction.NORTH)
-//				.build();
-//		
-//		ManualPlacingLayer layer = ManualPlacingLayer.builder()
-//				.entities(entities).player(player)
-//				.build();
-//		
-//		map = Map.builder()
-//				.generator(generator)
-//				.layer(layer)
-//				.name("Test Map")
-//				.build();
-//		
-//	}
-//	
-//	private static void generateEntities(List<Entity> eList) {
-//		eList.add(new Car(Direction.EAST, EntitiesTexture.CAR_1_TEXTURE));
-//		eList.add(new Truck(Direction.NORTH, EntitiesTexture.TRUCK_1_TEXTURE));
-//	}
 }

@@ -7,12 +7,13 @@ public class Car extends Entity {
 
 	/**
 	 * Create a new Car
+	 * 
 	 * @param dir - the facing direction of the entity
 	 * @param texture - the texture used by the entity
 	 * @see fr.f1parking.core.entities.Entity
 	 */
-	public Car(Direction dir, Texture t) {
-		super(dir, t);
+	public Car(Direction dir, Texture texture) {
+		super(dir, texture);
 	}
 
 	@Override

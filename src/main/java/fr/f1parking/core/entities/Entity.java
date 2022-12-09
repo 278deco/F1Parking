@@ -17,6 +17,7 @@ public abstract class Entity {
 	
 	/**
 	 * Create a new Entity
+	 * 
 	 * @param dir - the facing direction of the entity
 	 * @param texture - the texture used by the entity
 	 */
@@ -28,6 +29,7 @@ public abstract class Entity {
 	
 	/**
 	 * Return an unique ID used to identified the entity on the grid
+	 * 
 	 * @return an UUID
 	 */
 	public UUID getId() {
@@ -36,6 +38,7 @@ public abstract class Entity {
 	
 	/**
 	 * Return the facing direction of the entity
+	 * 
 	 * @return a direction
 	 */
 	public Direction getFacingDirection() {
@@ -44,6 +47,7 @@ public abstract class Entity {
 	
 	/**
 	 * Return the texture's name used by the car
+	 * 
 	 * @return the texture name
 	 */
 	public Texture getTexture() {
@@ -52,6 +56,7 @@ public abstract class Entity {
 	
 	/**
 	 * Return the texture's name used by the car
+	 * 
 	 * @return the texture name
 	 */
 	public String getTextureName() {
@@ -60,15 +65,19 @@ public abstract class Entity {
 	
 	/**
 	 * Return the size of the entity (the number of boxes used to store the entity in the grid)
+	 * 
 	 * @return the entity's size
 	 */
 	public abstract int getSize();
 	
 	/**
 	 * Compare two entities and tell if they are equals or not
-	 * <p> Points of comparaison : </br>
-	 * The entity's size </br>
-	 * The entity's facing direction </br>
+	 * <p> Points of comparaison : <br>
+	 * The entity's size <br>
+	 * The entity's facing direction <br>
+	 * 
+	 * @param obj - the object to be compared with this instance
+	 * @return if the obj is equal to this instance
 	 */
 	@Override
 	public boolean equals(Object obj) {

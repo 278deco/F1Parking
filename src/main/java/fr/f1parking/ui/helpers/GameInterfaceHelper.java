@@ -13,21 +13,21 @@ public class GameInterfaceHelper {
 	 * @param paneList
 	 * @return the updated GameFlowPane list
 	 */
-	public static List<GameFlowPane> addPaneToRightGameFlowPane(List<GameFlowPane> paneList, Entity target, FlowPane newPane) {
-		boolean ret = false;
-		for(GameFlowPane gamePane : paneList) {
-			if(gamePane.getEntityId().equals(target.getId())) {
-				gamePane.addFlowPane(newPane);
-				ret = true;
-			}
-		}
-		if(!ret) paneList.add(new GameFlowPane(target.getId(), newPane));
-		
-		return paneList;
-	}
-	
+//	public static List<GameFlowPane> addPaneToRightGameFlowPane(List<GameFlowPane> paneList, Entity target, FlowPane newPane) {
+//		boolean ret = false;
+//		for(GameFlowPane gamePane : paneList) {
+//			if(gamePane.getEntityId().equals(target.getId())) {
+//				gamePane.addFlowPane(newPane);
+//				ret = true;
+//			}
+//		}
+//		if(!ret) paneList.add(new GameFlowPane(target.getId(), newPane));
+//		
+//		return paneList;
+//	}
+//	
 	public static GameFlowPane getRightFlowPane(List<GameFlowPane> paneList, FlowPane selection) {
-		for(GameFlowPane gamePane : paneList) if(gamePane.isFlowPanePresent(selection)) return gamePane;
+		for(GameFlowPane gamePane : paneList) if(gamePane.getPane().equals(selection)) return gamePane;
 		return null;
 	}
 	

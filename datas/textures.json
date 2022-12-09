@@ -44,5 +44,15 @@
       "path" : "datas/img/cars",
       "file" : "williams.png"
     }
+  },
+  "trucks" : {
+    "blueTruck" : {
+      "path" : "datas/img/trucks",
+      "file" : "blue_truck.png"
+    },
+    "greenTruck" : {
+      "path" : "datas/img/trucks",
+      "file" : "green_truck.png"
+    }
   }
 }

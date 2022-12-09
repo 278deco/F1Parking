@@ -1,5 +1,8 @@
 package fr.f1parking.core.entities.placement;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+
 import fr.f1parking.utils.Tuple;
 
 /**
@@ -12,8 +15,9 @@ public class Coordinate {
 	
 	/**
 	 * Create a new coordinate (store the x and y in one object)
-	 * @param x - the x value
-	 * @param y - the y value
+	 * 
+	 * @param x the x value
+	 * @param y the y value
 	 */
 	public Coordinate(int x, int y) {
 		this.x = x;
@@ -22,7 +26,8 @@ public class Coordinate {
 	
 	/**
 	 * Create a new coordinate
-	 * @param tuple - a tuple of integer (Value A = X, Value B = Y)
+	 * 
+	 * @param tuple a tuple of integer (Value A = X, Value B = Y)
 	 */
 	public Coordinate(Tuple<Integer, Integer> tuple) {
 		this.x = tuple.getValueA();
@@ -31,7 +36,8 @@ public class Coordinate {
 
 	/**
 	 * Add a number to the coordinate's x and y values
-	 * @param a - the value to be added
+	 * 
+	 * @param a the value to be added
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate add(int a) {
@@ -40,6 +46,7 @@ public class Coordinate {
 	
 	/**
 	 * Add an other coordinate to the coordinate's x and y values
+	 * 
 	 * @param other - The coordinate to be added
 	 * @return a new coordinate with the calculated values
 	 */
@@ -48,8 +55,25 @@ public class Coordinate {
 	}
 	
 	/**
+	 * Add a number to the coordinate's x and/or y values depending if 
+	 * they satisfy the given predicate
+	 * 
+	 * @param filter - a predicate which returns {@code true} for the coordinate value to be incremented by a
+	 * @param a - the value to be added
+	 * @return a new coordinate with the calculated values
+	 */
+	public Coordinate add(Predicate<Integer> filter, int a) {
+		Objects.requireNonNull(filter);
+		int x = getX();
+		int y = getY();
+		
+		return new Coordinate(filter.test(x) ? x+a : x, filter.test(y) ? y+a : y);
+	}
+	
+	/**
 	 * Subtract a number to the coordinate's x and y values
-	 * @param a - the value to be subtracted
+	 * 
+	 * @param a the value to be subtracted
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate sub(int a) {
@@ -58,16 +82,34 @@ public class Coordinate {
 	
 	/**
 	 * Subtract an other coordinate to the coordinate's x and y values
-	 * @param other - The coordinate to be subtracted
+	 * 
+	 * @param other The coordinate to be subtracted
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate sub(Coordinate other) {
 		return new Coordinate(this.x-other.x, this.y-other.y);
 	}
+	
+	/**
+	 * Subtract a number to the coordinate's x and/or y values depending if 
+	 * they satisfy the given predicate
+	 * 
+	 * @param filter a predicate which returns {@code true} for the coordinate value to be decremented by a
+	 * @param a the value to be subtracted
+	 * @return a new coordinate with the calculated values
+	 */
+	public Coordinate sub(Predicate<Integer> filter, int a) {
+		Objects.requireNonNull(filter);
+		int x = getX();
+		int y = getY();
+		
+		return new Coordinate(filter.test(x) ? x-a : x, filter.test(y) ? y-a : y);
+	}
 
 	/**
 	 * Multiply a number to the coordinate's x and y values
-	 * @param a - the value to be multiplied
+	 * 
+	 * @param a the value to be multiplied
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate times(int a) {
@@ -76,7 +118,8 @@ public class Coordinate {
 	
 	/**
 	 * Multiply an other coordinate to the coordinate's x and y values
-	 * @param other - The coordinate to be multiplied
+	 * 
+	 * @param other The coordinate to be multiplied
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate times(Coordinate other) {
@@ -84,8 +127,25 @@ public class Coordinate {
 	}
 	
 	/**
+	 * Multiply a number to the coordinate's x and/or y values depending if 
+	 * they satisfy the given predicate
+	 * 
+	 * @param filter a predicate which returns {@code true} for the coordinate value to be multiplied by a
+	 * @param a the value to be multiplied
+	 * @return a new coordinate with the calculated values
+	 */
+	public Coordinate times(Predicate<Integer> filter, int a) {
+		Objects.requireNonNull(filter);
+		int x = getX();
+		int y = getY();
+		
+		return new Coordinate(filter.test(x) ? x*a : x, filter.test(y) ? y*a : y);
+	}
+	
+	/**
 	 * Divide a number to the coordinate's x and y values
-	 * @param a - the value to be divided
+	 * 
+	 * @param a the value to be divided
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate div(int a) {
@@ -94,7 +154,8 @@ public class Coordinate {
 	
 	/**
 	 * Divide an other coordinate to the coordinate's x and y values
-	 * @param other - The coordinate to be divided
+	 * 
+	 * @param other The coordinate to be divided
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate div(Coordinate other) {
@@ -102,7 +163,24 @@ public class Coordinate {
 	}
 	
 	/**
+	 * Divide a number to the coordinate's x and/or y values depending if 
+	 * they satisfy the given predicate
+	 * 
+	 * @param filter a predicate which returns {@code true} for the coordinate value to be divided by a
+	 * @param a the value to be divided
+	 * @return a new coordinate with the calculated values
+	 */
+	public Coordinate div(Predicate<Integer> filter, int a) {
+		Objects.requireNonNull(filter);
+		int x = getX();
+		int y = getY();
+		
+		return new Coordinate(filter.test(x) ? x/a : x, filter.test(y) ? y/a : y);
+	}
+	
+	/**
 	 * Get the absolute value of the coordinates (replace every negative number by their positive counterparts)
+	 * 
 	 * @return a new coordinate with the calculated values
 	 */
 	public Coordinate abs() {
@@ -111,6 +189,7 @@ public class Coordinate {
 	
 	/**
 	 * Get the X value stored in the object
+	 * 
 	 * @return the x value
 	 */
 	public int getX() {
@@ -119,6 +198,7 @@ public class Coordinate {
 	
 	/**
 	 * Get the Y value stored in the object
+	 * 
 	 * @return the y value
 	 */
 	public int getY() {
@@ -128,6 +208,7 @@ public class Coordinate {
 	/**
 	 * Compare the coordinate with two other objects and determine
 	 * if the coordinate is contained between the {@code lower} and {@code upper}
+	 * 
 	 * @param lower - the lower coordinate (the tested coordinate shouldn't be lower than this one)
 	 * @param upper - the upper coordinate (the tested coordinate shouldn't be greater than this one)
 	 * @return if the coordinate is within the interval
@@ -139,7 +220,8 @@ public class Coordinate {
 	/**
 	 * Compare the coordinate with an other object and determine
 	 * if the coordinate is greater than {@code other}
-	 * @param other - the other coordinate
+	 * 
+	 * @param other the other coordinate
 	 * @return if the coordinate is greater than the argument
 	 */
 	public boolean greaterThan(Coordinate other) {
@@ -149,7 +231,8 @@ public class Coordinate {
 	/**
 	 * Compare the coordinate with an other object and determine
 	 * if the coordinate is lower than {@code other}
-	 * @param other - the other coordinate
+	 * 
+	 * @param other the other coordinate
 	 * @return if the coordinate is lower than the argument
 	 */
 	public boolean lowerThan(Coordinate other) {
@@ -159,7 +242,8 @@ public class Coordinate {
 	/**
 	 * Compare the coordinate with an other object and determine
 	 * if the coordinate is equal to {@code other}
-	 * @param other - the other coordinate
+	 * 
+	 * @param obj the other coordinate
 	 * @return if the coordinate is equal to the argument
 	 */
 	@Override

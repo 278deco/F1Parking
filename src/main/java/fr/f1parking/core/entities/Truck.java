@@ -11,8 +11,8 @@ public class Truck extends Entity {
 	 * @param texture - the texture used by the entity
 	 * @see fr.f1parking.core.entities.Entity
 	 */
-	public Truck(Direction dir, Texture t) {
-		super(dir, t);
+	public Truck(Direction dir, Texture texture) {
+		super(dir, texture);
 	}
 
 	@Override

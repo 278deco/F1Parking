@@ -26,6 +26,7 @@ public class RandomSeed {
 	
 	/**
 	 * Create a new seed and generate it
+	 * 
 	 * @param byteWeight - the byte weight applied to the seed
 	 */
 	public RandomSeed(RandomSeedByte byteWeight) {
@@ -37,7 +38,8 @@ public class RandomSeed {
 	/**
 	 * Create a new seed and define it value. 
 	 * This seed is constant and not computer generated
-	 * @param seed - the seed used
+	 * 
+	 * @param seed - the seed to be used
 	 */
 	public RandomSeed(long seed) {
 		this.byteWeight = RandomSeedByte.USER_GENERATED;
@@ -66,10 +68,10 @@ public class RandomSeed {
 	
 	/**
 	 * Regenerate the seed contained in this class
-	 * <p>By default it, this method will set the new RandomSeedByte to 32 </br>
+	 * <p>By default it, this method will set the new RandomSeedByte to 32 <br>
 	 * <strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
-	 * @param byteSeed - a seed used to generate a new one
-	 * @see #setSeed(byte[])
+	 * 
+	 * @param seed - a seed used to generate a new one
 	 */
 	public void regenerateSeed(long seed) {
 		this.regenerateSeed(generateByteSeedArray(seed), RandomSeedByte.BYTE_32);
@@ -77,8 +79,9 @@ public class RandomSeed {
 	
 	/**
 	 * Regenerate the seed contained in this class
-	 * <p>By default it, this method will set the new RandomSeedByte to 32 </br>
+	 * <p>By default it, this method will set the new RandomSeedByte to 32 <br>
 	 * <strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
+	 * 
 	 * @param byteSeed - an array of seed used by the seed generator
 	 */
 	public void regenerateSeed(byte[] byteSeed) {
@@ -88,9 +91,9 @@ public class RandomSeed {
 	/**
 	 * Regenerate the seed contained in this class
 	 * <p><strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
-	 * @param byteSeed - a seed used to generate a new one
+	 * 
+	 * @param seed - a seed used to generate a new one
 	 * @param weight - an new RandomSeedByte used in the generation
-	 * @see #setSeed(byte[])
 	 */
 	public void regenerateSeed(long seed, RandomSeedByte weight) {
 		this.regenerateSeed(generateByteSeedArray(seed), weight);
@@ -99,6 +102,7 @@ public class RandomSeed {
 	/**
 	 * Regenerate the seed contained in this class
 	 * <p><strong>Any call of this method will overwrite the seed contained in this instance</strong></p>
+	 * 
 	 * @param byteSeed - an array of seed used by the seed generator
 	 * @param weight - an new RandomSeedByte used in the generation
 	 */
@@ -109,6 +113,7 @@ public class RandomSeed {
 	
 	/**
 	 * Get the stored seed in this class
+	 * 
 	 * @return the seed
 	 */
 	public long getSeed() {
@@ -122,7 +127,8 @@ public class RandomSeed {
 	/**
 	 * Compare this instance of RandomSeed with another 
 	 * and tell if their are equal
-	 * @param Object obj - the object to be compared
+	 * 
+	 * @param obj - the object to be compared
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -139,6 +145,7 @@ public class RandomSeed {
 	
 	/**
 	 * Represent the number of byte computed into the seed
+	 * 
 	 * @author 278deco
 	 * @version 1.0
 	 * @since 0.1
@@ -155,7 +162,8 @@ public class RandomSeed {
 		
 		/**
 		 * Get the weight of the seed byte used
-		 * @return
+		 * 
+		 * @return the weight
 		 */
 		public int getWeight() {
 			return weight;
