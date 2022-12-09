@@ -3,21 +3,17 @@ package fr.f1parking.ui.interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.f1parking.core.entities.Car;
 import fr.f1parking.core.entities.Entity;
 import fr.f1parking.core.entities.EntityPlayer;
-import fr.f1parking.core.entities.Truck;
 import fr.f1parking.core.entities.placement.Coordinate;
 import fr.f1parking.core.entities.placement.Direction;
 import fr.f1parking.core.helpers.DeplacementHelper;
 import fr.f1parking.core.helpers.MapHelper;
-import fr.f1parking.core.helpers.RendererHelper;
-import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.level.Map;
+import fr.f1parking.core.level.MapLoader;
 import fr.f1parking.core.level.gen.IGenerator;
-import fr.f1parking.core.level.gen.generators.ManualPlacingGenerator;
-import fr.f1parking.core.level.gen.layers.ManualPlacingLayer;
 import fr.f1parking.core.level.objects.GridBox;
+import fr.f1parking.core.maps.IMap;
 import fr.f1parking.ui.Coordinator;
 import fr.f1parking.ui.helpers.CSSHelper;
 import fr.f1parking.ui.helpers.GameInterfaceHelper;
@@ -78,7 +74,6 @@ public class GameInterface implements IInterface {
 		this.selectedEntityPane = null;
 		
 		initDialogBox(d);
-		setupBackGame();
 	
 		// initialize scene
 
@@ -214,20 +209,18 @@ public class GameInterface implements IInterface {
 		
 		buttonPane.getChildren().add(movingButtonRow);
 
-		Button exit = new Button("Retour au menu");
+		Button exit = new Button("Retour \u00e0 la s\u00e9lection");
 		CSSHelper.setButtonStyle(exit, 200, 30);
 		CSSHelper.setButtonOnHover(this.game_scene, exit, 200, 30);
 
 		exit.setAlignment(Pos.CENTER);
 		exit.setOnAction(event -> {
-			d.change_scene(2);
+			d.change_scene(5);
 		});
 		
 		first_gridpane.add(exit, 2, 1);
 		GridPane.setHalignment(exit, HPos.CENTER);
 		GridPane.setValignment(exit, VPos.TOP);
-		
-		displayGame(game_root);
 		
 		this.game_scene.setOnKeyPressed(event -> {
 			switch(event.getCode()) {
@@ -253,34 +246,20 @@ public class GameInterface implements IInterface {
 		});
 	}
 
-	private void setupBackGame() {
-		this.player = new EntityPlayer();
-		this.npcEntities = new ArrayList<>();
-		npcEntities.add(new Truck(Direction.EAST, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck1")));
-		npcEntities.add(new Truck(Direction.EAST, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck2")));
-		npcEntities.add(new Truck(Direction.NORTH, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck4")));
-		npcEntities.add(new Truck(Direction.NORTH, IOHandler.getInstance().getTexturesFile().getTruckTexture("truck3")));
-		npcEntities.add(new Car(Direction.EAST, IOHandler.getInstance().getTexturesFile().getCarTexture("alpineBlue")));
+	public void setupBackGame(int mapId) {
 		
+		IMap loadingMap = MapLoader.getInstance().getMap(mapId);
 		
-		ManualPlacingGenerator generator = ManualPlacingGenerator.builder()
-				.placement(0, 2, 2, 2, Direction.EAST) // Player
-				.placement(0, 0, 1, 3, Direction.EAST) // Truck 1
-				.placement(3, 0, 1, 3, Direction.EAST) // Truck 2
-				.placement(3, 4, 1, 3, Direction.NORTH) // Truck 3
-				.placement(4, 4, 1, 2, Direction.EAST) // Car 1
-				.placement(5, 3, 1, 3, Direction.NORTH) // Truck 4
-				.build();
-		
-		ManualPlacingLayer layer = ManualPlacingLayer.builder()
-				.entities(npcEntities).player(player)
-				.build();
+		this.npcEntities = loadingMap.getEntities();
+		this.player = loadingMap.getPlayer();
 		
 		this.gameMap = Map.builder()
-				.generator(generator)
-				.layer(layer)
-				.name("Niveau 4")
+				.generator(loadingMap.getGenerator())
+				.layer(loadingMap.getLayer())
+				.name(loadingMap.getName())
 				.build();
+		
+		displayGame(game_root);
 		
 //		this.gameTree = Tree.builder()
 //				.seed(new RandomSeed())

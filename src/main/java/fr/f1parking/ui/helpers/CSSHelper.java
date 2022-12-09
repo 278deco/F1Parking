@@ -13,6 +13,8 @@ public class CSSHelper {
 		button.setStyle("-fx-background-color: #B2BABB ;-fx-background-radius: 15px; -fx-font-size: 15px ");
 		return button;
 	}
+	
+	
 
 	public static void setButtonOnHover(Scene scene, Button btn, int sizeX, int sizeY) {
 		btn.hoverProperty().addListener((observable, oldValue, newValue) -> {

@@ -4,29 +4,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import fr.f1parking.core.io.IOHandler;
-import fr.f1parking.core.level.Difficulty;
-import fr.f1parking.core.level.gen.RandomSeed;
-import fr.f1parking.core.level.gen.backtracking.Tree;
+import fr.f1parking.core.level.MapLoader;
+import fr.f1parking.core.maps.Number1Map;
 import fr.f1parking.ui.Coordinator;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 public class Main {
 	
-//	private static EntityPlayer player;
-//	private static List<Entity> entities;
-//	private static Map map;
-	
-	private static Tree treeMap;
-	
 	private static final Logger LOGGER = LogManager.getLogger(Main.class);
 	
 	public static void main(String[] args) {
 		IOHandler.getInstance();
-//		
-//		generateTreeMap();
-//		
-//		treeMap.testRender();
+		
+		MapLoader.getInstance().addNewMap(new Number1Map());
 		
 		Application.launch(Coordinator.class, args);
 		
@@ -63,14 +54,14 @@ public class Main {
 		Platform.exit();
 	}
 	
-	public static void generateTreeMap() {
-		treeMap = Tree.builder()
-			.seed(new RandomSeed())
-			.difficulty(Difficulty.EASY)
-			.build();
-		
-		treeMap.generateMap();
-	}
+//	public static void generateTreeMap() {
+//		treeMap = Tree.builder()
+//			.seed(new RandomSeed())
+//			.difficulty(Difficulty.EASY)
+//			.build();
+//		
+//		treeMap.generateMap();
+//	}
 	
 	public static byte byteGen(byte obj, byte size, byte rot) {
 		return (byte)((obj<<6)+(size<<4)+rot);

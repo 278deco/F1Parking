@@ -88,7 +88,7 @@ public class CongratulationModal implements IInterface {
 		 * BOTTOM
 		 */
 		
-		Button return_menu = new Button("Retourner au menu");
+		Button return_menu = new Button("Retour \u00e0 la s\u00e9lection");
 		CSSHelper.setButtonStyle(return_menu, 200, 30);
 		CSSHelper.setButtonOnHover(this.modalScene, return_menu, 200, 30);
 

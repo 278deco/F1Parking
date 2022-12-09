@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import fr.f1parking.ui.interfaces.GameInterface;
 import fr.f1parking.ui.interfaces.HightscoreInterface;
 import fr.f1parking.ui.interfaces.IntroInterface;
+import fr.f1parking.ui.interfaces.MapSelectionInterface;
 import fr.f1parking.ui.interfaces.MenuInterface;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -24,6 +25,7 @@ public class Coordinator extends Application {
 	private File logoFile;
 
 	private GameInterface game_interface;
+	private MapSelectionInterface map_selection_interface;
 	private MenuInterface menue_interface;
 	private HightscoreInterface hightscore_interface;
 	private IntroInterface intro_interface;
@@ -40,6 +42,7 @@ public class Coordinator extends Application {
 		Image icon = new Image(logoFile.toURI().toString(), 0.2 * WIDTH, 0.2 * HEIGHT, false, true);
 
 		menue_interface = new MenuInterface(this);
+		map_selection_interface = new MapSelectionInterface(this);
 		game_interface = new GameInterface(this);
 		hightscore_interface = new HightscoreInterface(this);
 		intro_interface = new IntroInterface(this);
@@ -67,9 +70,15 @@ public class Coordinator extends Application {
 			break;
 		case 4:
 			primaryStage.setScene(intro_interface.getInterface());
+		case 5:
+			primaryStage.setScene(map_selection_interface.getInterface());
 			break;
 		}
 
+	}
+	
+	public void loadSelectedMap(int mapId) {
+		this.game_interface.setupBackGame(mapId);
 	}
 
 	public Logger getLogger() {

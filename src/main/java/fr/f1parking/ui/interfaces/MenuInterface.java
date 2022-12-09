@@ -103,7 +103,7 @@ public class MenuInterface implements IInterface {
 		CSSHelper.setButtonStyle(start_game, 200, 60);
 		CSSHelper.setButtonOnHover(this.scene_menue, start_game, 200, 60);
 		start_game.setOnAction(event -> {
-			c.change_scene(1);
+			c.change_scene(5);
 		});
 
 		top_button_center.getChildren().add(start_game);
