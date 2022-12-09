@@ -19,7 +19,7 @@ public class JSONTextures extends JSONFile {
 	public JSONTextures(String path) {
 		super(path, "textures.json");
 		
-		this.MISSING_TEXTURE = new Texture("missingTexture", "datas/img", "missing_texture.png");
+		this.MISSING_TEXTURE = new Texture("missingTexture", "Missing Texture", "datas/img", "missing_texture.png");
 		
 		carsMap = new HashMap<>();
 		trucksMap = new HashMap<>();
@@ -29,7 +29,7 @@ public class JSONTextures extends JSONFile {
 			for(Map.Entry<String, Object> entry : ((HashMap<String, Object>) getData().get("cars")).entrySet()) {
 				try {
 					final Map<String, String> textureValues = (HashMap<String, String>)entry.getValue();
-					carsMap.put(entry.getKey(), new Texture(entry.getKey(), (String)textureValues.get("path"), (String)textureValues.get("file")));
+					carsMap.put(entry.getKey(), new Texture(entry.getKey(), (String)textureValues.get("display_name"), (String)textureValues.get("path"), (String)textureValues.get("file")));
 					
 				}catch(Exception e) { 
 					LOGGER.warn("Invalid entry for a car texture (ID: "+entry.getKey()+"). Skipping to next entry.");
@@ -40,7 +40,7 @@ public class JSONTextures extends JSONFile {
 			for(Map.Entry<String, Object> entry : ((HashMap<String, Object>) getData().get("trucks")).entrySet()) {
 				try {
 					final Map<String, String> textureValues = (HashMap<String, String>)entry.getValue();
-					trucksMap.put(entry.getKey(), new Texture(entry.getKey(), (String)textureValues.get("path"), (String)textureValues.get("file")));
+					trucksMap.put(entry.getKey(), new Texture(entry.getKey(), (String)textureValues.get("display_name"), (String)textureValues.get("path"), (String)textureValues.get("file")));
 					
 				}catch(Exception e) { 
 					LOGGER.warn("Invalid entry for a truck texture (ID: "+entry.getKey()+"). Skipping to next entry.");

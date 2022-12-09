@@ -20,14 +20,13 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class CongratulationModal implements IInterface {
+public class CongratulationModal extends AbstractInterface {
 
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 400;
 	
 	private final Stage modal;
-	private Scene modalScene;
-	
+
 	private Text congratLabel;
 
 	public CongratulationModal(Coordinator coord) {
@@ -46,7 +45,7 @@ public class CongratulationModal implements IInterface {
 		bottomRow.setPercentHeight(25);
 		
 		GridPane root = new GridPane();
-		this.modalScene = new Scene(root, WIDTH, HEIGHT);
+		this.sceneInterface = new Scene(root, WIDTH, HEIGHT);
 		
 		root.setAlignment(Pos.CENTER);
 		root.getRowConstraints().addAll(topRow, centerRow, bottomRow);
@@ -90,7 +89,7 @@ public class CongratulationModal implements IInterface {
 		
 		Button return_menu = new Button("Retour \u00e0 la s\u00e9lection");
 		CSSHelper.setButtonStyle(return_menu, 220, 30);
-		CSSHelper.setButtonOnHover(this.modalScene, return_menu, 220, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, return_menu, 220, 30);
 
 		return_menu.setOnAction(event1 -> {
 			coord.change_scene(5);
@@ -99,7 +98,7 @@ public class CongratulationModal implements IInterface {
 
 		Button exit = new Button("Quitter");
 		CSSHelper.setButtonStyle(exit, 100, 30);
-		CSSHelper.setButtonOnHover(this.modalScene, exit, 100, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 100, 30);
 
 		exit.setOnAction(event -> {
 			Main.stopProgram();
@@ -112,7 +111,7 @@ public class CongratulationModal implements IInterface {
 		root.add(center, 0, 1);
 		root.add(bottom, 0, 2);
 		
-		this.modal.setScene(this.modalScene);
+		this.modal.setScene(this.sceneInterface);
 	}
 
 	public void addMoveCount(int playerMoveCount) {	
@@ -124,7 +123,5 @@ public class CongratulationModal implements IInterface {
 	}
 
 	@Override
-	public Scene getInterface() {
-		return modalScene;
-	}
+	public void refreshScene(Coordinator c) { }
 }

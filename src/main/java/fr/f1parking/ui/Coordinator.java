@@ -50,7 +50,7 @@ public class Coordinator extends Application {
 		primaryStage.getIcons().add(icon);
 
 		primaryStage.setTitle("(Un)park the F1");
-		primaryStage.setScene(intro_interface.getInterface());
+		primaryStage.setScene(intro_interface.getInterface(this));
 		primaryStage.setResizable(false);
 		primaryStage.show();
 
@@ -65,19 +65,18 @@ public class Coordinator extends Application {
 		this.scene_indicator = i;
 		switch (i) {
 		case 1:
-			primaryStage.setScene(game_interface.getInterface());
+			primaryStage.setScene(game_interface.getInterface(this));
 			break;
 		case 2:
-			primaryStage.setScene(menue_interface.getInterface());
+			primaryStage.setScene(menue_interface.getInterface(this));
 			break;
 		case 3:
-			hightscore_interface.refresh(this);
-			primaryStage.setScene(hightscore_interface.getInterface());
+			primaryStage.setScene(hightscore_interface.getInterface(this));
 			break;
 		case 4:
-			primaryStage.setScene(intro_interface.getInterface());
+			primaryStage.setScene(intro_interface.getInterface(this));
 		case 5:
-			primaryStage.setScene(map_selection_interface.getInterface());
+			primaryStage.setScene(map_selection_interface.getInterface(this));
 			break;
 		}
 

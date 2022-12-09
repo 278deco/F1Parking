@@ -17,18 +17,16 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class MapSelectionInterface implements IInterface {
+public class MapSelectionInterface extends AbstractInterface {
 	
 	private static final int BUTTON_SIZE = 120;
-	
-	private Scene selection_scene;
 
 	public MapSelectionInterface(final Coordinator c) {
 	
 		// initialize scene
 
 		GridPane root = new GridPane();
-		this.selection_scene = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
 		
 		root.setStyle("-fx-background-color: #333333ff");
 		ColumnConstraints sideCons = new ColumnConstraints();
@@ -59,7 +57,7 @@ public class MapSelectionInterface implements IInterface {
 		
 		Button exit = new Button("Retour au menu");
 		CSSHelper.setButtonStyle(exit, 200, 30);
-		CSSHelper.setButtonOnHover(this.selection_scene, exit, 200, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 200, 30);
 
 		exit.setOnAction(event -> {
 			c.change_scene(2);
@@ -83,7 +81,7 @@ public class MapSelectionInterface implements IInterface {
 		final Button prevButton = new Button("Pr\u00e9c\u00e9dent");
 		prevButton.setDisable(true); //TODO add new pages
 		CSSHelper.setButtonStyle(prevButton, 125, 30);
-		CSSHelper.setButtonOnHover(this.selection_scene, prevButton, 125, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, prevButton, 125, 30);
 		
 		final Text pageText = new Text("1 / 1");
 		pageText.setStyle("-fx-font-size: 20px; -fx-fill: white");
@@ -91,7 +89,7 @@ public class MapSelectionInterface implements IInterface {
 		final Button nextButton = new Button("Suivant");
 		nextButton.setDisable(true); //TODO add new pages
 		CSSHelper.setButtonStyle(nextButton, 125, 30);
-		CSSHelper.setButtonOnHover(this.selection_scene, nextButton, 125, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, nextButton, 125, 30);
 		
 		buttonBox.getChildren().addAll(prevButton, pageText, nextButton);
 		
@@ -107,7 +105,7 @@ public class MapSelectionInterface implements IInterface {
 		for(int i = 0; i < MapLoader.getInstance().getMapNumber(); i++) {
 			final Button mapButton = new Button(MapLoader.getInstance().getMap(i).getName());
 			setSelectionButtonStyle(mapButton);
-			setSelectionButtonOnHover(this.selection_scene, mapButton);
+			setSelectionButtonOnHover(this.sceneInterface, mapButton);
 			
 			mapButton.setOnMouseClicked(event -> {
 				c.loadSelectedMap(MapLoader.getInstance().getIdMapWithName(event.getButton().name()));
@@ -151,8 +149,6 @@ public class MapSelectionInterface implements IInterface {
 	}
 	
 	@Override
-	public Scene getInterface() {
-		return this.selection_scene;
-	}
+	public void refreshScene(Coordinator c) { }
 
 }

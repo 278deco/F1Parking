@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public class Texture {
 	
 	private String textureName;
+	private String displayableName;
 	
 	private String path;
 	private String fileName;
@@ -16,12 +17,14 @@ public class Texture {
 	
 	/**
 	 * Create a new Texture object
+	 * 
 	 * @param textureName - the texture name (used in the program, not related to the file)
 	 * @param path - the path where the image is stored
 	 * @param fileName - the file's name on the disk
 	 */
-	public Texture(String textureName, String path,String fileName) {
+	public Texture(String textureName, String displayableName, String path, String fileName) {
 		this.textureName = textureName;
+		this.displayableName = displayableName;
 		
 		this.fileName = fileName;
 		this.path = path;
@@ -29,7 +32,7 @@ public class Texture {
 	}
 	
 	public Texture copy() {
-		return new Texture(this.textureName, this.path, this.fileName);
+		return new Texture(this.textureName, this.displayableName, this.path, this.fileName);
 	}
 	
 	public Image loadImage(int sizeX, int sizeY) {
@@ -43,7 +46,8 @@ public class Texture {
 	}
 	
 	/**
-	 * Get the texture name (used by program)
+	 * Get the texture's name (used by program)
+	 * 
 	 * @return the texture's name
 	 */
 	public String getTextureName() {
@@ -51,7 +55,17 @@ public class Texture {
 	}
 	
 	/**
+	 * Get the texture's name (can be used to be displayed)
+	 * 
+	 * @return the texture's name
+	 */
+	public String getDisplayableName() {
+		return displayableName;
+	}
+	
+	/**
 	 * Get the file name (file on the disk)
+	 * 
 	 * @return the file's name
 	 */
 	public String getFileName() {
@@ -60,6 +74,7 @@ public class Texture {
 	
 	/**
 	 * Get the path of the file
+	 * 
 	 * @return the files's path
 	 */
 	public String getPath() {
@@ -68,6 +83,7 @@ public class Texture {
 	
 	/**
 	 * Get the full path of the file (path + file's name)
+	 * 
 	 * @return the full path
 	 */
 	public String getFullPath() {

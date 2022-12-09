@@ -25,11 +25,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.util.Duration;
 
-public class MenuInterface implements IInterface {
+public class MenuInterface extends AbstractInterface {
 
 	private Button exit;
-
-	private Scene scene_menue;
 
 	private Animation leftAnimation, rightAnimation;
 
@@ -39,7 +37,7 @@ public class MenuInterface implements IInterface {
 		rightAnimation = new Animation();
 
 		GridPane root_menue = new GridPane(); // contains column used to divide
-		this.scene_menue = new Scene(root_menue, c.getWIDTH(), c.getHEIGHT()); //Create the scene for the menu with root
+		this.sceneInterface = new Scene(root_menue, c.getWIDTH(), c.getHEIGHT()); //Create the scene for the menu with root
 		
 		GridPane center_gridpane = new GridPane(); // contains buttons center pos
 		root_menue.setStyle("-fx-background-color: #333333ff");
@@ -101,7 +99,7 @@ public class MenuInterface implements IInterface {
 		
 		Button start_game = new Button("Lancer le jeu");
 		CSSHelper.setButtonStyle(start_game, 200, 60);
-		CSSHelper.setButtonOnHover(this.scene_menue, start_game, 200, 60);
+		CSSHelper.setButtonOnHover(this.sceneInterface, start_game, 200, 60);
 		start_game.setOnAction(event -> {
 			c.change_scene(5);
 		});
@@ -112,7 +110,7 @@ public class MenuInterface implements IInterface {
 
 		Button highscore = new Button("Tableau des scores");
 		CSSHelper.setButtonStyle(highscore, 200, 60);
-		CSSHelper.setButtonOnHover(this.scene_menue, highscore, 200, 60);
+		CSSHelper.setButtonOnHover(this.sceneInterface, highscore, 200, 60);
 		
 		highscore.setOnAction(event -> {
 			c.change_scene(3);
@@ -123,7 +121,7 @@ public class MenuInterface implements IInterface {
 		
 		Button exit = new Button("Quitter");
 		CSSHelper.setButtonStyle(exit, 200, 60);
-		CSSHelper.setButtonOnHover(this.scene_menue, exit, 200, 60);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 200, 60);
 
 		exit.setOnAction(event -> {
 			Main.stopProgram();
@@ -195,7 +193,5 @@ public class MenuInterface implements IInterface {
 	}
 
 	@Override
-	public Scene getInterface() {
-		return this.scene_menue;
-	}
+	public void refreshScene(Coordinator c) { }
 }

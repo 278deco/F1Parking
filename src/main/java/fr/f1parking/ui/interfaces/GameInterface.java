@@ -31,27 +31,29 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-public class GameInterface implements IInterface {
+public class GameInterface extends AbstractInterface {
 	
 	private CongratulationModal congratulationModal;
 	private Dialog<String> errorDeplacementBox;
 	
 	//Front
-	private Scene game_scene;
-	private GridPane game_root;
-	
-	private List<GameFlowPane> gameMapUI;
-	private FlowPane selectedEntityPane;
+	private final GridPane game_root;
 	private final Button buttonZ, buttonQ, buttonS, buttonD;
+	private final Text titleLabel;
+	
+	private final List<GameFlowPane> gameMapUI;
+	private FlowPane selectedEntityPane;
 	
 	//Back
 	private Map gameMap;
@@ -81,7 +83,7 @@ public class GameInterface implements IInterface {
 
 		GridPane first_gridpane = new GridPane();
 		//first_gridpane.setGridLinesVisible(true);
-		this.game_scene = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT()); //Define the game scene
 		
 		first_gridpane.setStyle("-fx-background-color: #333333ff");
 		ColumnConstraints first_gridpane_left_column = new ColumnConstraints();
@@ -187,13 +189,29 @@ public class GameInterface implements IInterface {
 		first_gridpane.add(game_root, 1, 1);
 
 		/*
+		 * TITLE (rule)
+		 */
+		
+		final Text objTitleLabel = new Text("Objectif : ");
+		objTitleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 25px; -fx-fill: white");
+		
+		titleLabel = new Text("Sortir la F1 de la grille !");
+		titleLabel.setStyle("-fx-font-size: 25px; -fx-fill: white");
+		
+		TextFlow titleFlow = new TextFlow(objTitleLabel,titleLabel);
+		titleFlow.setTextAlignment(TextAlignment.CENTER);
+		
+		first_gridpane.add(titleFlow, 1, 0);
+		GridPane.setHalignment(titleFlow, HPos.CENTER);
+		
+		/*
 		 * BUTTONS
 		 */
 		
 		buttonZ = new Button("Z");
 		buttonZ.setOnAction(event -> { onMovingButtonClick(Direction.NORTH); });
 		CSSHelper.setButtonStyle(buttonZ, 80, 80);
-		CSSHelper.setButtonOnHover(this.game_scene, buttonZ, 80, 80);
+		CSSHelper.setButtonOnHover(this.sceneInterface, buttonZ, 80, 80);
 		
 		buttonPane.getChildren().add(buttonZ);
 
@@ -205,17 +223,17 @@ public class GameInterface implements IInterface {
 		buttonQ = new Button("Q");
 		buttonQ.setOnAction(event -> { onMovingButtonClick(Direction.WEST); });
 		CSSHelper.setButtonStyle(buttonQ, 80, 80);
-		CSSHelper.setButtonOnHover(this.game_scene, buttonQ, 80, 80);
+		CSSHelper.setButtonOnHover(this.sceneInterface, buttonQ, 80, 80);
 		
 		buttonS = new Button("S");
 		buttonS.setOnAction(event -> { onMovingButtonClick(Direction.SOUTH); });
 		CSSHelper.setButtonStyle(buttonS, 80, 80);
-		CSSHelper.setButtonOnHover(this.game_scene, buttonS, 80, 80);
+		CSSHelper.setButtonOnHover(this.sceneInterface, buttonS, 80, 80);
 
 		buttonD = new Button("D");
 		buttonD.setOnAction(event -> { onMovingButtonClick(Direction.EAST); });
 		CSSHelper.setButtonStyle(buttonD, 80, 80);
-		CSSHelper.setButtonOnHover(this.game_scene, buttonD, 80, 80);
+		CSSHelper.setButtonOnHover(this.sceneInterface, buttonD, 80, 80);
 
 		movingButtonRow.getChildren().addAll(buttonQ, buttonS, buttonD);
 		
@@ -223,7 +241,7 @@ public class GameInterface implements IInterface {
 
 		Button exit = new Button("Retour \u00e0 la s\u00e9lection");
 		CSSHelper.setButtonStyle(exit, 220, 30);
-		CSSHelper.setButtonOnHover(this.game_scene, exit, 220, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 220, 30);
 
 		exit.setAlignment(Pos.CENTER);
 		exit.setOnAction(event -> {
@@ -234,7 +252,7 @@ public class GameInterface implements IInterface {
 		GridPane.setHalignment(exit, HPos.CENTER);
 		GridPane.setValignment(exit, VPos.TOP);
 		
-		this.game_scene.setOnKeyPressed(event -> {
+		this.sceneInterface.setOnKeyPressed(event -> {
 			switch(event.getCode()) {
 				case Z:
 					if(selectedEntityPane != null)
@@ -292,7 +310,9 @@ public class GameInterface implements IInterface {
 						
 						iv.setRotate(e.getFacingDirection().getRotation());
 						pane.getChildren().add(iv);
-						addEntityAction(pane);
+						pane.setOnMouseClicked(event -> {
+							entityPaneSelection(pane);
+						}); 
 						
 						this.gameMapUI.add(new GameFlowPane(e.getId(), pane));
 						
@@ -304,6 +324,14 @@ public class GameInterface implements IInterface {
 				}
 				
 			}
+		}
+	}
+	
+	private void displayGame(GridPane gamePane, Entity e) {
+		this.displayGame(gamePane);
+		if(e != null) {
+			GameFlowPane gameFp = GameInterfaceHelper.getRightFlowPane(this.gameMapUI, e);
+			this.entityPaneSelection(gameFp.getPane());
 		}
 	}
 	
@@ -335,7 +363,7 @@ public class GameInterface implements IInterface {
 				gameMapUI.clear();
 				selectRightDirectionButton(Direction.NULL, null);
 				selectedEntityPane = null;
-				displayGame(this.game_root);
+				displayGame(this.game_root, e);
 			}else {
 				errorDeplacementBox.setContentText("Ce d\u00e9placement n'est pas possible pour ce v\u00e9hicule !");
 				errorDeplacementBox.showAndWait();
@@ -343,27 +371,23 @@ public class GameInterface implements IInterface {
 		}
 	}
 	
-	private void addEntityAction(FlowPane pane) {
-		pane.setOnMouseClicked(event -> {
-			if(event.getButton() != MouseButton.PRIMARY) return;
-			
-			if(selectedEntityPane != pane) {
-				if(selectedEntityPane != null) 
-					selectedEntityPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
-			
-				final GameFlowPane gameFlowPane = GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane);
-				final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gameFlowPane.getEntityId());
-				
-				pane.setStyle("-fx-background-color: red, white; -fx-background-insets: 0, 3");
-				
-				selectedEntityPane = pane;
-				selectRightDirectionButton(e.getFacingDirection(), MapHelper.doesMapContains(this.gameMap.getMapCopy(), e));
-			}else {
+	private void entityPaneSelection(FlowPane pane) {
+		if(selectedEntityPane != pane) {
+			if(selectedEntityPane != null) 
 				selectedEntityPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
-				selectedEntityPane = null;
-				selectRightDirectionButton(Direction.NULL, null);
-			}
-		}); 
+		
+			final GameFlowPane gameFlowPane = GameInterfaceHelper.getRightFlowPane(this.gameMapUI, pane);
+			final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, gameFlowPane.getEntityId());
+			
+			pane.setStyle("-fx-background-color: red, white; -fx-background-insets: 0, 3");
+			
+			selectedEntityPane = pane;
+			selectRightDirectionButton(e.getFacingDirection(), MapHelper.doesMapContains(this.gameMap.getMapCopy(), e));
+		}else {
+			selectedEntityPane.setStyle("-fx-background-color: black, white; -fx-background-insets: 0,3;");
+			selectedEntityPane = null;
+			selectRightDirectionButton(Direction.NULL, null);
+		}
 	}
 	
 	private void selectRightDirectionButton(Direction entityDir, Coordinate entityPos) {
@@ -382,9 +406,11 @@ public class GameInterface implements IInterface {
 			buttonQ.setDisable(false); buttonD.setDisable(false);
 		}
 	}
-	
+
 	@Override
-	public Scene getInterface() {
-		return this.game_scene;
+	public void refreshScene(Coordinator c) {
+		titleLabel.setText("Sortir la F1 "+
+				IOHandler.getInstance().getTexturesFile().getCarTexture(IOHandler.getInstance().getConfiguration().getPlayerCar()).getDisplayableName()+
+				" de la grille !");
 	}
 }

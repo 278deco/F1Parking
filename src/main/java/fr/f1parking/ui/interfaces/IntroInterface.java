@@ -8,58 +8,51 @@ import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Text;
 
-public class IntroInterface implements IInterface {
-
-	private Scene intro_scene;
+public class IntroInterface extends AbstractInterface {
 
 	private MediaPlayer mediaplayer;
 
-	private boolean out_intro;
-
-	public IntroInterface(final Coordinator f) {
+	public IntroInterface(final Coordinator c) {
 
 		Group root = new Group();
 
-		out_intro = false;
-
 		Media intro_video = new Media(new File("datas/video-files/game_intro.mp4").toURI().toString());
 		mediaplayer = new MediaPlayer(intro_video);
-		if (f.getScene_indicator() == 4) {
+		if (c.getScene_indicator() == 4) {
 			mediaplayer.play();
 		} else {
 			mediaplayer.stop();
 		}
 
 		mediaplayer.setOnEndOfMedia(() -> {
-			out_intro = true;
 		//mediaplayer.stop();
-			f.change_scene(2);
+			c.change_scene(2);
 		});
-		if (out_intro) {
-			mediaplayer.stop();
-			f.change_scene(2);
-
-		}
-
+		
 		// mediaplayer.setAutoPlay(true);
 		MediaView view = new MediaView(mediaplayer);
 		root.setOnMouseClicked(event -> {
 			mediaplayer.stop();
 
-			f.change_scene(2);
+			c.change_scene(2);
 		});
-		root.getChildren().add(view);
+		
+		Text skipText = new Text("Cliquez pour passer l'introduction...");
+		skipText.setStyle("-fx-font-size: 9px; -fx-fill: white");
+		skipText.setTranslateX(10);
+		skipText.setTranslateY(c.getHEIGHT()-10);
+		
+		root.getChildren().addAll(view, skipText);
 
-		this.intro_scene = new Scene(root, 1280, 720);
+		this.sceneInterface = new Scene(root, 1280, 720);
 
 	}
-
+	
 	@Override
-	public Scene getInterface() {
+	public void refreshScene(Coordinator c) {
 		mediaplayer.setAutoPlay(true);
-
-		return this.intro_scene;
 	}
 
 }

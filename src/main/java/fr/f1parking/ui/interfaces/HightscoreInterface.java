@@ -19,15 +19,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class HightscoreInterface implements IInterface {
-
-    private Scene highscoreScene;
+public class HightscoreInterface extends AbstractInterface {
 
     private final VBox highscoreBox;
     
     public HightscoreInterface(final Coordinator c){
     	VBox root = new VBox();
-		this.highscoreScene = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
 		
 		root.setStyle("-fx-background-color: #333333ff");
 
@@ -58,7 +56,7 @@ public class HightscoreInterface implements IInterface {
 		
 		Button exit = new Button("Retour au menu");
 		CSSHelper.setButtonStyle(exit, 200, 30);
-		CSSHelper.setButtonOnHover(this.highscoreScene, exit, 200, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 200, 30);
 
 		exit.setOnAction(event -> {
 			c.change_scene(2);
@@ -136,14 +134,10 @@ public class HightscoreInterface implements IInterface {
     	}
     }
     
-    public void refresh(Coordinator c) {
+    @Override
+    public void refreshScene(Coordinator c) {
     	this.highscoreBox.getChildren().clear();
     	
 		this.addNewHighscore(this.highscoreBox, c);
-	}
-
-    @Override
-    public Scene getInterface() {
-    	return this.highscoreScene;
     }
 }
