@@ -108,7 +108,7 @@ public class MapSelectionInterface extends AbstractInterface {
 			setSelectionButtonOnHover(this.sceneInterface, mapButton);
 			
 			mapButton.setOnMouseClicked(event -> {
-				c.loadSelectedMap(MapLoader.getInstance().getIdMapWithName(event.getButton().name()));
+				c.loadSelectedMap(MapLoader.getInstance().getIdMapWithName(mapButton.getText()));
 				c.change_scene(1);
 			});
 			

@@ -100,9 +100,9 @@ public class CongratulationModal extends AbstractInterface {
 			this.modal.close();
 		});
 
-		Button exit = new Button("Quitter");
-		CSSHelper.setButtonStyle(exit, 100, 30);
-		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 100, 30);
+		Button exit = new Button("Quitter le jeu");
+		CSSHelper.setButtonStyle(exit, 150, 30);
+		CSSHelper.setButtonOnHover(this.sceneInterface, exit, 150, 30);
 
 		exit.setOnAction(event -> {
 			Main.stopProgram();

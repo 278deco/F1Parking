@@ -94,6 +94,7 @@ public class Coordinator extends Application {
 	 * @param mapId - the map's id
 	 */
 	public void loadSelectedMap(int mapId) {
+		
 		this.game_interface.setupBackGame(mapId);
 	}
 
