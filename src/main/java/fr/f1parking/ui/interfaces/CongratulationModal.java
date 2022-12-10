@@ -27,13 +27,14 @@ public class CongratulationModal extends AbstractInterface {
 	
 	private final Stage modal;
 
-	private Text congratLabel;
+	private final Text congratLabel, congratHighLabel;
 
-	public CongratulationModal(Coordinator coord) {
+	public CongratulationModal(Coordinator c) {
 		this.modal = new Stage();
 		this.modal.initModality(Modality.APPLICATION_MODAL);
-		this.modal.initOwner(coord.getPrimaryStage());
-		this.modal.getIcons().add(new Image(coord.getLogoFile().toURI().toString(), 0.2 * coord.getWIDTH(), 0.2 * coord.getHEIGHT(), false, true));
+		this.modal.initOwner(c.getPrimaryStage());
+		this.modal.setTitle(c.getWindowName());
+		this.modal.getIcons().add(new Image(c.getLogoFile().toURI().toString(), 0.2 * c.getWidth(), 0.2 * c.getHeight(), false, true));
 
 		RowConstraints topRow = new RowConstraints();
 		topRow.setPercentHeight(15);
@@ -71,11 +72,14 @@ public class CongratulationModal extends AbstractInterface {
 		
 		TextFlow congratFlow = new TextFlow();
 		
-		congratLabel = new Text();
-		congratFlow.getChildren().addAll(new Text("Bien jou\u00e9 ! Vous avez fait sortir la Formule 1 en "), this.congratLabel, new Text(" coup(s) !"));
 		
+		congratLabel = new Text();
+		congratHighLabel = new Text();
+		congratFlow.getChildren().addAll(new Text("Bien jou\u00e9 ! Vous avez fait sortir la Formule 1 en "), this.congratLabel, new Text(" coup(s) ! \n"), this.congratHighLabel);
+		
+		congratHighLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
 		congratLabel.setStyle("-fx-font-weight: bold");
-		congratFlow.setStyle("-fx-font-size: 14px;");
+		congratFlow.setStyle("-fx-font-size: 14px; -fx-text-alignment: center");
 
 		/*
 		 * CENTER
@@ -92,7 +96,7 @@ public class CongratulationModal extends AbstractInterface {
 		CSSHelper.setButtonOnHover(this.sceneInterface, return_menu, 220, 30);
 
 		return_menu.setOnAction(event1 -> {
-			coord.change_scene(5);
+			c.change_scene(5);
 			this.modal.close();
 		});
 
@@ -114,8 +118,9 @@ public class CongratulationModal extends AbstractInterface {
 		this.modal.setScene(this.sceneInterface);
 	}
 
-	public void addMoveCount(int playerMoveCount) {	
+	public void setPlayerScore(int playerMoveCount, boolean isNewHighscore) {	
 		this.congratLabel.setText(String.valueOf(playerMoveCount));
+		if(isNewHighscore) this.congratHighLabel.setText("Nouveau record !");
 	}
 	
 	public void show() {

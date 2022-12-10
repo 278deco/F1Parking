@@ -26,7 +26,7 @@ public class MapSelectionInterface extends AbstractInterface {
 		// initialize scene
 
 		GridPane root = new GridPane();
-		this.sceneInterface = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(root, c.getWidth(), c.getHeight()); //Define the game scene
 		
 		root.setStyle("-fx-background-color: #333333ff");
 		ColumnConstraints sideCons = new ColumnConstraints();
@@ -74,7 +74,7 @@ public class MapSelectionInterface extends AbstractInterface {
 		 */
 		
 		final HBox buttonBox = new HBox();
-		buttonBox.setStyle("-fx-background-color: #18181f");
+		buttonBox.setStyle("-fx-background-color: #242120");
 		buttonBox.setAlignment(Pos.CENTER);
 		buttonBox.setSpacing(60);
 		

@@ -10,6 +10,7 @@ import fr.f1parking.ui.interfaces.HightscoreInterface;
 import fr.f1parking.ui.interfaces.IntroInterface;
 import fr.f1parking.ui.interfaces.MapSelectionInterface;
 import fr.f1parking.ui.interfaces.MenuInterface;
+import fr.f1parking.ui.interfaces.ParameterInterface;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -19,8 +20,9 @@ public class Coordinator extends Application {
 	private final Logger LOGGER = LogManager.getLogger(Coordinator.class);
 
 	// application dimension
-	private int WIDTH = 1280;
-	private int HEIGHT = 720;
+	private final int WIDTH = 1280;
+	private final int HEIGHT = 720;
+	private final String WINDOW_NAME = "(Un)park the F1";
 
 	private File logoFile;
 
@@ -28,6 +30,7 @@ public class Coordinator extends Application {
 	private MapSelectionInterface map_selection_interface;
 	private MenuInterface menue_interface;
 	private HightscoreInterface hightscore_interface;
+	private ParameterInterface parameter_interface;
 	private IntroInterface intro_interface;
 
 	private Stage primaryStage;
@@ -45,11 +48,12 @@ public class Coordinator extends Application {
 		map_selection_interface = new MapSelectionInterface(this);
 		game_interface = new GameInterface(this);
 		hightscore_interface = new HightscoreInterface(this);
+		parameter_interface = new ParameterInterface(this);
 		intro_interface = new IntroInterface(this);
 
 		primaryStage.getIcons().add(icon);
 
-		primaryStage.setTitle("(Un)park the F1");
+		primaryStage.setTitle(WINDOW_NAME);
 		primaryStage.setScene(intro_interface.getInterface(this));
 		primaryStage.setResizable(false);
 		primaryStage.show();
@@ -78,6 +82,8 @@ public class Coordinator extends Application {
 		case 5:
 			primaryStage.setScene(map_selection_interface.getInterface(this));
 			break;
+		case 6:
+			primaryStage.setScene(parameter_interface.getInterface(this));
 		}
 
 	}
@@ -107,11 +113,15 @@ public class Coordinator extends Application {
 		return primaryStage;
 	}
 
-	public int getWIDTH() {
+	public int getWidth() {
 		return WIDTH;
 	}
 
-	public int getHEIGHT() {
+	public int getHeight() {
 		return HEIGHT;
+	}
+	
+	public String getWindowName() {
+		return WINDOW_NAME;
 	}
 }

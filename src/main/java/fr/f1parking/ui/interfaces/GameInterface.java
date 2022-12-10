@@ -65,10 +65,10 @@ public class GameInterface extends AbstractInterface {
 	private void initDialogBox(Coordinator coord) {
 		errorDeplacementBox = new Dialog<>();
 		
-		errorDeplacementBox.setTitle("Erreur");
+		errorDeplacementBox.setTitle(coord.getWindowName()+" - Erreur");
 		errorDeplacementBox.getDialogPane().getButtonTypes().add(new ButtonType("C'est compris !", ButtonData.OK_DONE));
 		((Stage)errorDeplacementBox.getDialogPane().getScene().getWindow())
-			.getIcons().add(new Image(coord.getLogoFile().toURI().toString(), 0.2 * coord.getWIDTH(), 0.2 * coord.getHEIGHT(), false, true));
+			.getIcons().add(new Image(coord.getLogoFile().toURI().toString(), 0.2 * coord.getWidth(), 0.2 * coord.getHeight(), false, true));
 	}
 	
 	public GameInterface(final Coordinator d) {
@@ -83,7 +83,7 @@ public class GameInterface extends AbstractInterface {
 
 		GridPane first_gridpane = new GridPane();
 		//first_gridpane.setGridLinesVisible(true);
-		this.sceneInterface = new Scene(first_gridpane, d.getWIDTH(), d.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(first_gridpane, d.getWidth(), d.getHeight()); //Define the game scene
 		
 		first_gridpane.setStyle("-fx-background-color: #333333ff");
 		ColumnConstraints first_gridpane_left_column = new ColumnConstraints();
@@ -155,7 +155,7 @@ public class GameInterface extends AbstractInterface {
 		ColumnConstraints gameColumExitCons = new ColumnConstraints();
 		gameColumExitCons.setPercentWidth(0.5);
 		
-		game_root.setStyle("-fx-background-color: #6c42f5");
+		game_root.setStyle("-fx-background-color: #404082");
 
 		// row matrix
 
@@ -183,7 +183,7 @@ public class GameInterface extends AbstractInterface {
 		
 		//Exit indicator
 		final FlowPane exitFlow = new FlowPane();
-		exitFlow.setStyle("-fx-background-color: green"); //
+		exitFlow.setStyle("-fx-background-color: green"); 
 		game_root.add(exitFlow, IGenerator.GRID_SIZE, (int)(IGenerator.GRID_SIZE-1)/2);
 		
 		first_gridpane.add(game_root, 1, 1);
@@ -353,8 +353,8 @@ public class GameInterface extends AbstractInterface {
 		final Entity e = MapHelper.getEntityMatchingID(this.npcEntities, this.player, GameInterfaceHelper.getRightFlowPane(this.gameMapUI, selectedEntityPane).getEntityId());
 		
 		if(e.equals(this.player) && MapHelper.isPlayerFinished(movement, MapHelper.doesMapContains(this.gameMap.getMapCopy(), e), this.player.getSize())) {
-			IOHandler.getInstance().getHighscoreFile().addNewScore(this.gameMap.getName(), this.playerMoveCount);
-			congratulationModal.addMoveCount(this.playerMoveCount);
+			final boolean high = IOHandler.getInstance().getHighscoreFile().addNewScore(this.gameMap.getName(), this.playerMoveCount);
+			congratulationModal.setPlayerScore(this.playerMoveCount, high);
 			congratulationModal.show();
 		}else {
 			if(this.gameMap.moveEntity(e, movement)) {

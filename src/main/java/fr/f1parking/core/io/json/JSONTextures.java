@@ -7,6 +7,7 @@ import java.util.Map;
 
 import fr.f1parking.core.io.JSONFile;
 import fr.f1parking.ui.render.Texture;
+import fr.f1parking.utils.Tuple;
 
 public class JSONTextures extends JSONFile {
 	
@@ -88,6 +89,18 @@ public class JSONTextures extends JSONFile {
 	
 	public Texture getRandomTrucksTexture(int randomNumber) {
 		return getTruckTexture(getRandomTrucksID(randomNumber));
+	}
+	
+	public Tuple<List<String>, List<String>> getCarNameList() {
+		final List<String> idName = new ArrayList<>();
+		final List<String> displayName = new ArrayList<>();
+		
+		for(Texture texture : this.carsMap.values()) {
+			idName.add(texture.getTextureName());
+			displayName.add(texture.getDisplayableName());
+		}
+		
+		return new Tuple<List<String>, List<String>>(idName, displayName);
 	}
 
 	@Override

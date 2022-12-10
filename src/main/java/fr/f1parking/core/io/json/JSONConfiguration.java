@@ -12,14 +12,14 @@ public class JSONConfiguration extends JSONFile {
 
 	public double getMusicVolume() {
 		if(getData().containsKey("music_volume")) {
-			return ((int)getData().get("music_volume"))/100D;
+			return ((long)getData().get("music_volume"))/100D;
 		}
 		return 1D;
 	}
 	
 	public double getSoundVolume() {
 		if(getData().containsKey("sound_volume")) {
-			return ((int)getData().get("sound_volume"))/100D;
+			return ((long)getData().get("sound_volume"))/100D;
 		}
 		return 1D;
 	}
@@ -51,9 +51,9 @@ public class JSONConfiguration extends JSONFile {
 	
 	@Override
 	public void preSave() {
-		getData().putIfAbsent("player_key", "redbull_f1");
-		getData().putIfAbsent("music_volume", "100");
-		getData().putIfAbsent("sound_volume", "100");
+		getData().putIfAbsent("player_car", "redbull_f1");
+		getData().putIfAbsent("music_volume", 100);
+		getData().putIfAbsent("sound_volume", 100);
 	}
 
 }

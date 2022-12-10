@@ -42,7 +42,7 @@ public class IntroInterface extends AbstractInterface {
 		Text skipText = new Text("Cliquez pour passer l'introduction...");
 		skipText.setStyle("-fx-font-size: 9px; -fx-fill: white");
 		skipText.setTranslateX(10);
-		skipText.setTranslateY(c.getHEIGHT()-10);
+		skipText.setTranslateY(c.getHeight()-10);
 		
 		root.getChildren().addAll(view, skipText);
 

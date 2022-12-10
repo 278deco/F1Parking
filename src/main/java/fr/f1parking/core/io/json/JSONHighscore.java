@@ -48,7 +48,7 @@ public class JSONHighscore extends JSONFile {
 		if(change) try {
 				saveFile();
 			} catch (IOException e) {
-				LOGGER.warn("An error occured while saving highscore file");
+				LOGGER.warn("An error occured while saving highscore file",e);
 			}
 		
 		

@@ -25,7 +25,7 @@ public class HightscoreInterface extends AbstractInterface {
     
     public HightscoreInterface(final Coordinator c){
     	VBox root = new VBox();
-		this.sceneInterface = new Scene(root, c.getWIDTH(), c.getHEIGHT()); //Define the game scene
+		this.sceneInterface = new Scene(root, c.getWidth(), c.getHeight()); //Define the game scene
 		
 		root.setStyle("-fx-background-color: #333333ff");
 
@@ -77,11 +77,11 @@ public class HightscoreInterface extends AbstractInterface {
 		final ScrollPane scrollPane = new ScrollPane(highscoreBox);
     	scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
     	scrollPane.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-		scrollPane.setPrefHeight(c.getHEIGHT());
+		scrollPane.setPrefHeight(c.getHeight());
 		scrollPane.setFitToWidth(true);
     	
 		highscoreBox.setStyle("-fx-background-color: #333333ff");
-		highscoreBox.setMinSize(scrollPane.getWidth(), c.getHEIGHT());
+		highscoreBox.setMinSize(scrollPane.getWidth(), c.getHeight());
 		highscoreBox.setSpacing(50D);
 		
 		root.getChildren().addAll(header, scrollPane);
