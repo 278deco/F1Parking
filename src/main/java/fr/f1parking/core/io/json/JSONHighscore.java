@@ -56,6 +56,11 @@ public class JSONHighscore extends JSONFile {
 	}
 
 	@Override
+	public void reviewFormat() {
+		
+	}
+	
+	@Override
 	public void preSave() {
 		
 	}

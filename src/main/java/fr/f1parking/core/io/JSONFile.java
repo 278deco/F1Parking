@@ -35,10 +35,17 @@ public abstract class JSONFile {
 
 			readFile();
 
+			reviewFormat();
+			
 		} catch (IOException e) {
 			LOGGER.warn("Unexpected error while loading file "+this.path,e);
 		}
 	}
+	
+	/**
+	 * Using this function to control if the value contained in the file are those expected
+	 */
+	public abstract void reviewFormat();
 
 	/**
 	 * Using this function to apply change to the content right before saving the file
@@ -60,7 +67,6 @@ public abstract class JSONFile {
 				try {
 					FileWriter fw = new FileWriter(path);
 
-					LOGGER.info(dataMap);
 					fw.write(FILES_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(dataMap));
 
 					fw.flush();
@@ -83,7 +89,7 @@ public abstract class JSONFile {
 	 * @throws IOException
 	 */
 	public void reloadFile() throws IOException {
-		dataMap.clear();
+		this.dataMap.clear();
 
 		readFile();
 	}
@@ -103,7 +109,7 @@ public abstract class JSONFile {
 	 * @return a JSONObject representing the file
 	 */
 	protected HashMap<String, Object> getData() {
-		return (HashMap<String, Object>) this.dataMap;
+		return (HashMap<String, Object>) this.dataMap;		
 	}
 
 	/**

@@ -4,6 +4,8 @@ import fr.f1parking.core.io.IOHandler;
 import fr.f1parking.core.io.JSONFile;
 import fr.f1parking.ui.render.Texture;
 
+import static fr.f1parking.core.io.JSONAssertion.assertInstanceof;
+
 public class JSONConfiguration extends JSONFile {
 
 	public JSONConfiguration(String path) {
@@ -50,10 +52,18 @@ public class JSONConfiguration extends JSONFile {
 	}
 	
 	@Override
+	public void reviewFormat() {
+		assertInstanceof(getData().get("music_volume"), Long.class, "music_volume");
+		assertInstanceof(getData().get("sound_volume"), Long.class, "sound_volume");
+		assertInstanceof(getData().get("player_car"), String.class, "player_car");
+	}
+	
+	@Override
 	public void preSave() {
 		getData().putIfAbsent("player_car", "redbull_f1");
 		getData().putIfAbsent("music_volume", 100);
 		getData().putIfAbsent("sound_volume", 100);
 	}
+
 
 }

@@ -9,6 +9,8 @@ import fr.f1parking.core.io.JSONFile;
 import fr.f1parking.ui.render.Texture;
 import fr.f1parking.utils.Tuple;
 
+import static fr.f1parking.core.io.JSONAssertion.assertInstanceof;
+
 public class JSONTextures extends JSONFile {
 	
 	private final Map<String, Texture> carsMap;
@@ -103,6 +105,12 @@ public class JSONTextures extends JSONFile {
 		return new Tuple<List<String>, List<String>>(idName, displayName);
 	}
 
+	@Override
+	public void reviewFormat() {
+		assertInstanceof(getData().get("cars"), HashMap.class, "cars");
+		assertInstanceof(getData().get("trucks"), HashMap.class, "trucks");
+	}
+	
 	@Override
 	public void preSave() {
 		
